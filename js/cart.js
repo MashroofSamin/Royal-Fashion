@@ -22,83 +22,84 @@ function removeFromCart(index) {
     if (typeof updateCartCount === "function") updateCartCount();
 }
 
-// THE MAIN RENDER FUNCTION
 function renderCart() {
     const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
     const container = document.getElementById('cart-items-container');
     const subtotalEl = document.getElementById('cart-subtotal');
     const totalEl = document.getElementById('cart-total');
+    const shippingEl = document.getElementById('cart-shipping'); 
 
-    // Grab the new UI elements we added
     const checkoutBtn = document.getElementById('checkout-btn');
     const termsCheckbox = document.getElementById('terms-agree');
-    const minWarning = document.getElementById('min-order-warning');
 
     let subtotal = 0;
-    const MIN_ORDER = 40.00;
-    const SHIPPING_FEE = 10.00;
 
     if (!container) return;
 
-    // 1. Handle Empty Cart
     if (cart.length === 0) {
-        container.innerHTML = `
-            <div style="padding: 40px 0; text-align: center;">
-                <p>Your bag is currently empty.</p>
-                <br>
-                <a href="apparel.html" style="color: black; font-weight: bold; text-decoration: none; border-bottom: 2px solid black;">CONTINUE SHOPPING</a>
-            </div>`;
+        container.innerHTML = `<div style="padding: 40px 0; text-align: center;"><p>Your bag is currently empty.</p></div>`;
         if (subtotalEl) subtotalEl.innerText = "$0.00";
         if (totalEl) totalEl.innerText = "$0.00";
         if (checkoutBtn) checkoutBtn.disabled = true;
         return;
     }
 
-    // 2. Render the Items
+    // 1. Render Items & Calculate Subtotal
     container.innerHTML = cart.map((item, index) => {
         const price = item.price || 0;
         const itemTotal = price * item.quantity;
         subtotal += itemTotal;
-
         return `
             <div class="cart-item">
                 <img src="${item.image}" alt="${item.name}" class="cart-item-img">
                 <div class="item-info">
                     <h4>${item.name}</h4>
                     <p>Size: ${item.size}</p>
-                    <p>Price: $${price.toFixed(2)}</p>
                     <div class="qty-adjuster">
                         <button onclick="updateQty(${index}, -1)">-</button>
                         <span>${item.quantity}</span>
                         <button onclick="updateQty(${index}, 1)">+</button>
                     </div>
-                    <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
                 </div>
-                <div class="item-price-total">
-                    <strong>$${itemTotal.toFixed(2)}</strong>
-                </div>
-            </div>
-        `;
+                <div class="item-price-total"><strong>$${itemTotal.toFixed(2)}</strong></div>
+            </div>`;
     }).join('');
 
-    // 3. Update the Numbers in the Sidebar
-    const finalTotal = subtotal + SHIPPING_FEE;
+    // 2. UPDATE THE UI NUMBERS
     if (subtotalEl) subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
-    if (totalEl) totalEl.innerText = `$${finalTotal.toFixed(2)}`;
+    
+    // Shipping Status Logic
+    if (shippingEl) {
+        if (subtotal >= 100) {
+            // Global Free Shipping reached
+            shippingEl.innerText = "FREE";
+            shippingEl.style.color = "var(--brand-green)";
+            shippingEl.style.fontWeight = "bold";
+            shippingEl.style.fontSize = "1rem";
+        } else if (subtotal >= 40) {
+            // US Free Shipping reached
+            shippingEl.innerText = "FREE (US Only)";
+            shippingEl.style.color = "var(--brand-green)";
+            shippingEl.style.fontWeight = "bold";
+            shippingEl.style.fontSize = "0.9rem";
+        } else {
+            // Below both thresholds
+            shippingEl.innerText = "Calculated at checkout";
+            shippingEl.style.fontSize = "0.8rem";
+            shippingEl.style.color = "#888";
+            shippingEl.style.fontWeight = "normal";
+        }
+    }
 
-    // 4. CHECKOUT LOGIC (Minimum Order + Policy Agreement)
+    // On this page, the Total will just equal the Subtotal for now
+    if (totalEl) totalEl.innerText = `$${subtotal.toFixed(2)}`;
+
+    // 3. CHECKOUT LOGIC (Terms agreement only)
     function validateCheckout() {
-        const isMinMet = subtotal >= MIN_ORDER;
         const isAgreed = termsCheckbox ? termsCheckbox.checked : false;
 
-        // Show/Hide warning
-        if (minWarning) {
-            minWarning.style.display = isMinMet ? 'none' : 'block';
-        }
-
-        // Enable/Disable Button
         if (checkoutBtn) {
-            if (isMinMet && isAgreed) {
+            if (isAgreed) {
                 checkoutBtn.disabled = false;
                 checkoutBtn.style.opacity = "1";
                 checkoutBtn.style.cursor = "pointer";
@@ -110,15 +111,9 @@ function renderCart() {
         }
     }
 
-    // Run validation immediately
     validateCheckout();
-
-    // Re-run validation whenever the checkbox is clicked
-    if (termsCheckbox) {
-        termsCheckbox.onchange = validateCheckout;
-    }
+    if (termsCheckbox) termsCheckbox.onchange = validateCheckout;
 }
-
 // Add this to allow changing quantity directly in the cart
 function updateQty(index, amount) {
     let cart = JSON.parse(localStorage.getItem('royalCart')) || [];
@@ -154,3 +149,16 @@ function removeFromCart(index) {
 
 // Use DOMContentLoaded to ensure the HTML is ready before we try to inject items
 document.addEventListener('DOMContentLoaded', renderCart);
+
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'claim-shipping-toggle') {
+        const details = document.getElementById('shipping-details');
+        if (details.style.display === "none") {
+            details.style.display = "block";
+            e.target.innerText = "Close info";
+        } else {
+            details.style.display = "none";
+            e.target.innerText = "Claim free shipping!";
+        }
+    }
+});

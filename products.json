@@ -147,8 +147,8 @@
         "id": 9,
         "name": "Little Italy Onesie",
         "price": 32.00,
-        "category": "shirts",
-        "subcat": "T-Shirts",
+        "category": "bibs",
+        "subcat": "Bibs",
         "dept": "Infants",
         "sizes": [
             "6M",
@@ -314,6 +314,86 @@
     {
         "id": 20,
         "name": "Empire State Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    },
+    {
+        "id": 21,
+        "name": "Snow Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    },
+    {
+        "id": 22,
+        "name": "Princess Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    },
+    {
+        "id": 23,
+        "name": "Princess Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    },
+    {
+        "id": 24,
+        "name": "Princess Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    },
+    {
+        "id": 25,
+        "name": "Princess Snowglobe",
         "price": 45.00,
         "category": "gifts",
         "subcat": "Snowglobes",

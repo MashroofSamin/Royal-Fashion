@@ -40,42 +40,50 @@ function initZoom(imgID, resultID) {
         result.style.visibility = "hidden";
     });
 
-    function moveLens(e) {
-        let pos, x, y;
-        e.preventDefault();
+function moveLens(e) {
+    let pos, x, y;
+    e.preventDefault();
+    pos = getCursorPos(e);
 
-        // Get cursor position relative to the image
-        pos = getCursorPos(e);
+    /* NEW: Calculate the ratio between the image's actual size and displayed size */
+    /* This fixes the "offset" if the bib is a different size/shape than others */
+    const ratioX = img.offsetWidth / img.naturalWidth;
+    const ratioY = img.offsetHeight / img.naturalHeight;
 
-        // Calculate the position of the lens
-        x = pos.x - (lens.offsetWidth / 2);
-        y = pos.y - (lens.offsetHeight / 2);
+    /* Calculate the position of the lens, adjusted by the ratio */
+    x = pos.x - (lens.offsetWidth / 2);
+    y = pos.y - (lens.offsetHeight / 2);
 
-        // Prevent the lens from being positioned outside the image
-        if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
-        if (x < 0) { x = 0; }
-        if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
-        if (y < 0) { y = 0; }
+    /* Prevent the lens from being positioned outside the image */
+    if (x > img.offsetWidth - lens.offsetWidth) { x = img.offsetWidth - lens.offsetWidth; }
+    if (x < 0) { x = 0; }
+    if (y > img.offsetHeight - lens.offsetHeight) { y = img.offsetHeight - lens.offsetHeight; }
+    if (y < 0) { y = 0; }
 
-        // Set the position of the lens
-        lens.style.left = x + "px";
-        lens.style.top = y + "px";
+    /* Set the position of the lens */
+    lens.style.left = x + "px";
+    lens.style.top = y + "px";
 
-        // Display what the lens "sees" in the result DIV
-        result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
-    }
+    /* Display what the lens "sees" */
+    /* We use offsetWidth/Height here to ensure it matches the CSS exactly */
+    result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+}
 
-    function getCursorPos(e) {
-        let a, x = 0, y = 0;
-        e = e || window.event;
-        /* Get the x and y positions of the image relative to the viewport */
-        a = img.getBoundingClientRect();
-        /* Calculate the cursor's x and y coordinates, relative to the image */
-        x = (e.pageX || e.touches[0].pageX) - a.left;
-        y = (e.pageY || e.touches[0].pageY) - a.top;
-        /* Consider any page scrolling */
-        x = x - window.pageXOffset;
-        y = y - window.pageYOffset;
-        return { x: x, y: y };
-    }
+function getCursorPos(e) {
+    let a, x = 0, y = 0;
+    e = e || window.event;
+    
+    // Get image position relative to the viewport
+    a = img.getBoundingClientRect();
+    
+    // Use clientX/Y (relative to viewport) to match getBoundingClientRect
+    let pageX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+    let pageY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+
+    // Calculate cursor coordinates relative to the image
+    x = pageX - a.left;
+    y = pageY - a.top;
+
+    return { x: x, y: y };
+}
 }

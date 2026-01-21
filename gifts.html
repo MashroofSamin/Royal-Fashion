@@ -45,16 +45,12 @@
             <details open>
                 <summary>Color</summary>
                 <div class="color-filter-grid">
-                    <div class="color-option" style="background: white;" onclick="toggleColorFilter('white', this)">
-                    </div>
-                    <div class="color-option" style="background: black;" onclick="toggleColorFilter('black', this)">
-                    </div>
+                    <div class="color-option" style="background: white;" onclick="toggleColorFilter('white', this)"></div>
+                    <div class="color-option" style="background: black;" onclick="toggleColorFilter('black', this)"></div>
                     <div class="color-option" style="background: grey;" onclick="toggleColorFilter('grey', this)"></div>
                     <div class="color-option" style="background: navy;" onclick="toggleColorFilter('navy', this)"></div>
-                    <div class="color-option" style="background: yellow;" onclick="toggleColorFilter('yellow', this)">
-                    </div>
-                    <div class="color-option" style="background: orange;" onclick="toggleColorFilter('orange', this)">
-                    </div>
+                    <div class="color-option" style="background: yellow;" onclick="toggleColorFilter('yellow', this)"></div>
+                    <div class="color-option" style="background: orange;" onclick="toggleColorFilter('orange', this)"></div>
                 </div>
             </details>
         </aside>
@@ -66,6 +62,17 @@
                 <span class="cat-tab" onclick="setMainCategory('License Plates', this)">License Plates</span>
                 <span class="cat-tab" onclick="setMainCategory('Mugs', this)">Mugs</span>
                 <span class="cat-tab" onclick="setMainCategory('Snowglobes', this)">Snowglobes</span>
+            </div>
+
+            <div class="shipping-claim-container" style="text-align: center; margin-bottom: 25px;">
+                <button type="button" id="claim-shipping-toggle" 
+                    style="background: none; border: none; color: #28a745; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 0.9rem;">
+                    Claim free shipping!
+                </button>
+                <div id="shipping-details" style="display: none; margin-top: 8px; font-size: 0.75rem; color: #666; background: #f9f9f9; padding: 8px; border-radius: 4px;">
+                    Spend <strong>$40</strong> for Free US Shipping <br> 
+                    or <strong>$100</strong> for Free International Shipping!
+                </div>
             </div>
 
             <div id="product-container"></div>
@@ -83,7 +90,19 @@
     <script src="js/shop.js"></script>
 
     <script>
-        // Slider Logic specific to this page's price range
+        // Toggle Logic for Shipping Info
+        document.getElementById('claim-shipping-toggle').addEventListener('click', function() {
+            const details = document.getElementById('shipping-details');
+            if (details.style.display === "none") {
+                details.style.display = "block";
+                this.innerText = "Close info";
+            } else {
+                details.style.display = "none";
+                this.innerText = "Claim free shipping!";
+            }
+        });
+
+        // Slider Logic
         const s1 = document.getElementById("slider-1");
         const s2 = document.getElementById("slider-2");
         const d1 = document.getElementById("range1");
@@ -113,6 +132,35 @@
 
         window.addEventListener('load', fill);
     </script>
+    <div class="shipping-claim-container" style="text-align: center; margin: 20px 0;">
+    <button type="button" id="claim-shipping-toggle" 
+        style="background: none; border: none; color: #39bd44; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 1rem;">
+        Claim free shipping!
+    </button>
+    
+    <div id="shipping-details" style="display: none; margin-top: 10px; font-size: 0.85rem; color: #555; background: #f9f9f9; padding: 10px; border-radius: 5px; border: 1px solid #eee;">
+        Spend <strong>$40</strong> for Free US Shipping <br> 
+        or <strong>$100</strong> for Free International Shipping!
+    </div>
+</div>
+    <script src="js/shop.js"></script>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('claim-shipping-toggle');
+        const details = document.getElementById('shipping-details');
 
+        if (toggleBtn && details) {
+            toggleBtn.addEventListener('click', function() {
+                if (details.style.display === "none" || details.style.display === "") {
+                    details.style.display = "block";
+                    toggleBtn.innerText = "Close shipping info";
+                } else {
+                    details.style.display = "none";
+                    toggleBtn.innerText = "Claim free shipping!";
+                }
+            });
+        }
+    });
+</script>
 </html>

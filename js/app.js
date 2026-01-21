@@ -1,4 +1,5 @@
 let currentProduct = null;
+let selectedSize = null; 
 
 // 1. Core Loader
 async function loadProductDetails() {
@@ -20,15 +21,30 @@ async function loadProductDetails() {
             mainImg.src = currentProduct.image;
             mainImg.alt = currentProduct.name;
 
-            const sizeSelect = document.getElementById('sizeSelect');
-            if (sizeSelect && currentProduct.sizes) {
-                sizeSelect.innerHTML = currentProduct.sizes.map(size =>
-                    `<option value="${size}">${size}</option>`
+            // --- SIZE TILE LOGIC ---
+            const sizeGrid = document.getElementById('size-grid');
+            if (sizeGrid && currentProduct.sizes) {
+                // Generate the HTML for the tiles
+                sizeGrid.innerHTML = currentProduct.sizes.map((size, index) =>
+                    `<div class="size-tile ${index === 0 ? 'selected' : ''}" data-size="${size}">${size}</div>`
                 ).join('');
 
-                // ADDED: Initialize UI now that sizes are loaded
-                updateUIFromCart();
+                // Set initial size selection
+                selectedSize = currentProduct.sizes[0];
+
+                // Attach click listeners to the new tiles
+                document.querySelectorAll('.size-tile').forEach(tile => {
+                    tile.onclick = function() {
+                        document.querySelectorAll('.size-tile').forEach(t => t.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedSize = this.getAttribute('data-size'); 
+                        updateUIFromCart(); 
+                    };
+                });
             }
+
+            // Important: update UI after sizes are set
+            updateUIFromCart();
 
             mainImg.onload = () => {
                 if (typeof initZoom === "function") initZoom("mainProductImg", "zoomResult");
@@ -54,21 +70,16 @@ function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
     const countElement = document.getElementById('cart-count');
     if (countElement) {
-        // Sum up the quantities of all items in the array
         const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
         countElement.textContent = total;
     }
 }
 
-// Call this immediately so the number is correct when the page opens
-updateCartCount();
-
 // 3. UI Logic for +/- Toggle
 function updateUIFromCart() {
-    const sizeSelect = document.getElementById('sizeSelect');
-    if (!currentProduct || !sizeSelect) return;
+    // Check global variables instead of DOM elements
+    if (!currentProduct || !selectedSize) return;
 
-    const selectedSize = sizeSelect.value;
     const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
     const existingItem = cart.find(item => item.id === currentProduct.id && item.size === selectedSize);
 
@@ -89,65 +100,62 @@ function updateUIFromCart() {
 }
 
 // 4. Cart Action Logic
-// Function to handle the +/- clicks - NO ALERTS
 function changeQty(amount) {
-    const sizeSelect = document.getElementById('sizeSelect');
-    if (!currentProduct || !sizeSelect) return;
+    // 1. Ensure we have a product and a size selected from the tiles
+    if (!currentProduct || !selectedSize) {
+        console.log("No size selected yet");
+        return;
+    }
 
-    const selectedSize = sizeSelect.value;
     let cart = JSON.parse(localStorage.getItem('royalCart')) || [];
+    
+    // 2. Check if this product + the tile size is already in the cart
     const index = cart.findIndex(item => item.id === currentProduct.id && item.size === selectedSize);
 
     if (index > -1) {
-        // If it exists, just update the number
+        // Update quantity if it exists
         cart[index].quantity += amount;
         if (cart[index].quantity <= 0) cart.splice(index, 1);
     } else if (amount > 0) {
-        // ONLY ADDS NEW ITEM IF NOT FOUND
+        // Add as a new item if it doesn't
         cart.push({
             id: currentProduct.id,
             name: currentProduct.name,
             price: currentProduct.price,
             image: currentProduct.image,
-            size: selectedSize,
-            quantity: 1
+            size: selectedSize, // This is the value from the clicked tile
+            quantity: 1,
+            link: `product-detail.html?id=${currentProduct.id}` 
         });
     }
 
+    // 3. Save and refresh the UI
     localStorage.setItem('royalCart', JSON.stringify(cart));
     updateUIFromCart();
     updateCartCount();
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. This updates the Free Shipping bar and Bag count immediately
     updateCartCount();
 
     const initialAddBtn = document.getElementById('initial-add-btn');
     const plusBtn = document.getElementById('plus-btn');
     const minusBtn = document.getElementById('minus-btn');
-    const sizeSelect = document.getElementById('sizeSelect');
 
-    // Use .onclick to ensure only ONE listener is active
-    if (initialAddBtn) {
-        initialAddBtn.onclick = (e) => {
-            changeQty(1);
-        };
-    }
+    // 2. Button listeners for the Product Detail page
+    if (initialAddBtn) initialAddBtn.onclick = () => changeQty(1);
+    if (plusBtn) plusBtn.onclick = () => changeQty(1);
+    if (minusBtn) minusBtn.onclick = () => changeQty(-1);
 
-    if (plusBtn) {
-        plusBtn.onclick = () => changeQty(1);
-    }
-
-    if (minusBtn) {
-        minusBtn.onclick = () => changeQty(-1);
-    }
-
-    if (sizeSelect) {
-        sizeSelect.onchange = updateUIFromCart;
-    }
-
+    // 3. Kick off the product loader if we are on a detail page
     if (document.querySelector('.product-title')) {
         loadProductDetails();
+    }
+    
+    // 4. If you have any price sliders or filters to init, do it here
+    if (typeof slideOne === "function") {
+        slideOne();
+        slideTwo();
     }
 });

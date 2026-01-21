@@ -168,25 +168,28 @@ input[type="range"]::-webkit-slider-thumb {
     justify-content: space-between;
     background: #f4f4f4;
     border: 1px solid var(--brand-green);
+    border-radius: 4px; /* Essential for the look */
+    overflow: hidden;   /* Keeps buttons inside the rounded corners */
     width: 100%;
     max-width: 320px;
-    /* Match your button width */
 }
 
 .quantity-toggle button {
     background: var(--brand-green);
     color: white;
     border: none;
-    padding: 12px 25px;
+    padding: 12px 20px;
     font-size: 1.2rem;
     cursor: pointer;
-    font-weight: bold;
+    transition: 0.2s;
+    font-weight: bold; /* Added from second choice */
 }
 
 .quantity-toggle span {
     font-weight: bold;
     font-size: 1.1rem;
     color: var(--dark);
+    padding: 0 20px;
 }
 
 .cat-tab.active {
@@ -203,6 +206,7 @@ input[type="range"]::-webkit-slider-thumb {
 /* --- PRODUCT GRID SYSTEM --- */
 .category-section {
     width: 100%;
+    max-width: 1200px;
     margin-bottom: 60px;
 }
 
@@ -272,10 +276,11 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .product-img {
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    /* Prevents the bib/shirt from stretching */
+    display: block;
+    margin: auto;
 }
 
 .product-img {
@@ -443,38 +448,8 @@ input[type="range"]::-webkit-slider-thumb {
     color: var(--dark);
 }
 
-.quantity-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f4f4f4;
-    border: 1px solid var(--brand-green);
-    border-radius: 4px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 320px;
-    /* Match your card/button width */
-}
-
-.quantity-toggle button {
-    background: var(--brand-green);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
 .quantity-toggle button:hover {
     background: #2e9b37;
-}
-
-.quantity-toggle span {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: var(--dark);
-    padding: 0 20px;
 }
 
 .item-price-total {
@@ -483,4 +458,86 @@ input[type="range"]::-webkit-slider-thumb {
     color: var(--brand-green);
     min-width: 80px;
     text-align: right;
+}
+
+/* Only applies to the images inside the cart */
+.cart-item-img {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cart-item-img:hover {
+    transform: scale(1.02); /* Makes the image slightly grow when hovered */
+}
+
+.size-grid {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.size-tile {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.size-tile.selected {
+    background: var(--brand-green);
+    color: white;
+    border-color: var(--brand-green);
+}
+
+.shipping-tracker-container {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #eee;
+    margin-bottom: 30px; /* Space before products start */
+    text-align: center;
+    border-radius: 4px;
+}
+
+#shipping-message {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #333;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    max-width: 500px;
+    height: 10px; /* Slightly taller for better visibility */
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #eee; /* Light border for definition */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); /* Adds an "inner" depth */
+}
+
+.progress-bar-fill {
+    width: 0%; 
+    height: 100%;
+    background: #39bd44; 
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(57, 189, 68, 0.3); /* Soft glow to make the green pop */
+}
+
+.shipping-tracker-container {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.cart-page-container {
+    padding-bottom: 60px; /* Space between the cart summary and the footer */
 }

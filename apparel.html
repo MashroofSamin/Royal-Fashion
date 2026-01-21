@@ -86,7 +86,17 @@
                 <span class="cat-tab" onclick="setMainCategory('bibs', this)">Infants</span>
             </div>
 
-            <div id="product-container"></div>
+<div class="shipping-claim-container" style="text-align: center; margin-top: 10px;">
+    <button type="button" id="claim-shipping-toggle" 
+        style="background: none; border: none; color: #28a745; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 0.9rem;">
+        Claim free shipping!
+    </button>
+    <div id="shipping-details" style="display: none; margin-top: 8px; font-size: 0.75rem; color: #666; background: #f9f9f9; padding: 8px; border-radius: 4px;">
+        Spend <strong>$40</strong> for Free US Shipping <br> 
+        or <strong>$100</strong> for Free International Shipping!
+    </div>
+</div>
+                 <div id="product-container"></div>
         </main>
     </div>
 
@@ -95,6 +105,7 @@
     </footer>
 
     <script src="js/shop.js"></script>
+    
 </body>
 
 </html>

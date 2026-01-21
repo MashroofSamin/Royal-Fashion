@@ -6,12 +6,15 @@ window.refreshGlobalCart = updateCartCount;
 async function loadProducts() {
     try {
         const response = await fetch('products.json');
-        products = await response.json();
-
+        products = await response.json(); 
+        
+        // This ensures the slider exists before trying to color it
         if (document.getElementById("slider-1")) {
             fillSlider();
         }
-        applyFilters();
+
+        applyFilters(); 
+        updateCartCount(); 
     } catch (error) {
         console.error("Error loading products:", error);
     }
@@ -73,8 +76,8 @@ function applyFilters() {
     const minP = s1 ? parseInt(s1.value) : 0;
     const maxP = s2 ? parseInt(s2.value) : 1000;
 
+    // Use 'products' (the global list we loaded in loadProducts)
     const filtered = products.filter(p => {
-        // FIXED: This now checks if the tab clicked matches the category OR the subcategory
         const matchCat = activeMainCategory === "all" ||
             p.category === activeMainCategory ||
             p.subcat === activeMainCategory;
@@ -85,15 +88,18 @@ function applyFilters() {
 
         return matchCat && matchDept && matchColor && matchPrice;
     });
+
+    // Pass the filtered list to your row-building function
     renderRows(filtered);
 }
+
+let visibleLimits = {}; // Object to track the limit for each subcategory
 
 function renderRows(data) {
     const container = document.getElementById('product-container');
     if (!container) return;
     container.innerHTML = "";
 
-    // Grouping logic for the "Organizers" (Subcategory Headers)
     const subcategories = [...new Set(data.map(p => p.subcat))].sort();
 
     if (data.length === 0) {
@@ -129,19 +135,63 @@ function renderRows(data) {
 }
 
 function updateCartCount() {
+    // 1. Get the current cart from local storage
     const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
+    
+    // 2. Update the Bag number in the Nav
     const countElement = document.getElementById('cart-count');
-    if (countElement) {
-        // Sum up the quantities of all items in the array
-        const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-        countElement.textContent = total;
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    if (countElement) countElement.textContent = totalItems;
+
+    // 3. FREE SHIPPING CALCULATION
+    const goal = 40; // Set your free shipping threshold here
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    
+    const progressMsg = document.getElementById('shipping-message');
+    const progressBar = document.getElementById('shipping-progress');
+
+    // Only run if the elements exist on the current page
+    if (progressMsg && progressBar) {
+        const remaining = goal - totalPrice;
+
+        if (remaining > 0) {
+            // Still progress to be made
+            progressMsg.innerText = `Add $${remaining.toFixed(2)} more for free shipping!`;
+            
+            // Calculate percentage (e.g., $40 spent / $100 goal = 40%)
+            const percent = (totalPrice / goal) * 100;
+            progressBar.style.width = percent + "%";
+            progressMsg.style.color = "#333"; // Default color
+        } else {
+            // Goal reached
+            progressMsg.innerHTML = "🎉 You've earned <strong>FREE SHIPPING!</strong>";
+            progressBar.style.width = "100%";
+            progressMsg.style.color = "var(--brand-green)"; // Turn text green
+        }
     }
 }
 
 // Call this immediately so the number is correct when the page opens
 updateCartCount();
 
-// Run on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('claim-shipping-toggle');
+    const details = document.getElementById('shipping-details');
+
+    if (toggleBtn && details) {
+        toggleBtn.addEventListener('click', () => {
+            // If it's hidden, show it. If it's shown, hide it.
+            if (details.style.display === "none") {
+                details.style.display = "block";
+                toggleBtn.innerText = "Close shipping info";
+            } else {
+                details.style.display = "none";
+                toggleBtn.innerText = "Claim free shipping!";
+            }
+        });
+    }
+});
+
 // Run everything inside ONE listener to prevent double-firing
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();

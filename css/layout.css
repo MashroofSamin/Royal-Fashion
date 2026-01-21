@@ -1,3 +1,14 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.shop-main-wrapper {
+    flex: 1; 
+}
+
 /* --- NAVIGATION --- */
 nav {
     display: flex;
@@ -47,8 +58,10 @@ nav ul li a:hover {
 
 /* --- FOOTER --- */
 footer {
-    padding: 4rem 5%;
-    background: var(--dark);
-    color: var(--white);
+    width: 100%;
+    padding: 40px 0;
     text-align: center;
+    background-color: #fff; /* Match your site background */
+    border-top: 1px solid #eee;
+    margin-top: auto; /* Final insurance to push it down */
 }
