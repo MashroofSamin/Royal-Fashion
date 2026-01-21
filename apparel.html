@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Apparel | Royal Fashion NYC</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/shop.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Images/logo.png" class="site-logo" alt="Royal Fashion Logo">
+            </a>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="cart.html">Bag (<span id="cart-count">0</span>)</a></li>
+
+        </ul>
+    </nav>
+
+    <div class="shop-main-wrapper">
+        <aside class="filter-sidebar">
+            <h2>Filters</h2>
+
+            <details open>
+                <summary>Department</summary>
+                <div class="filter-options">
+                    <label><input type="checkbox" class="dept-filter" value="Men" onchange="applyFilters()"> Men</label>
+                    <label><input type="checkbox" class="dept-filter" value="Women" onchange="applyFilters()">
+                        Women</label>
+                    <label><input type="checkbox" class="dept-filter" value="Kids" onchange="applyFilters()">
+                        Kids</label>
+                    <label><input type="checkbox" class="dept-filter" value="Infants" onchange="applyFilters()">
+                        Infants</label>
+                    <label><input type="checkbox" class="dept-filter" value="Unisex" onchange="applyFilters()">
+                        Unisex</label>
+                </div>
+            </details>
+
+            <details open>
+                <summary>Price Range</summary>
+                <div class="price-input-container">
+                    <div class="price-label">$<span id="range1">0</span></div>
+                    <div class="price-label">$<span id="range2">500</span></div>
+                </div>
+                <div class="price-slider-wrapper">
+                    <div class="slider-track" id="track"></div>
+                    <input type="range" min="0" max="500" value="0" id="slider-1" oninput="slideOne()">
+                    <input type="range" min="0" max="500" value="500" id="slider-2" oninput="slideTwo()">
+                </div>
+            </details>
+
+            <details open>
+                <summary>Color</summary>
+                <div class="color-filter-grid">
+                    <div class="color-option" style="background: white;" onclick="toggleColorFilter('white', this)">
+                    </div>
+                    <div class="color-option" style="background: black;" onclick="toggleColorFilter('black', this)">
+                    </div>
+                    <div class="color-option" style="background: grey;" onclick="toggleColorFilter('grey', this)"></div>
+                    <div class="color-option" style="background: #39bd44;" onclick="toggleColorFilter('green', this)">
+                    </div>
+                    <div class="color-option" style="background: navy;" onclick="toggleColorFilter('navy', this)"></div>
+                </div>
+            </details>
+        </aside>
+
+        <main class="product-area">
+            <div class="category-nav">
+                <span class="cat-tab active" onclick="setMainCategory('all', this)">All</span>
+                <span class="cat-tab" onclick="setMainCategory('shirts', this)">Shirts</span>
+                <span class="cat-tab" onclick="setMainCategory('hoodies', this)">Hoodies</span>
+                <span class="cat-tab" onclick="setMainCategory('jackets', this)">Jackets</span>
+                <span class="cat-tab" onclick="setMainCategory('hats', this)">Hats</span>
+                <span class="cat-tab" onclick="setMainCategory('pajamas', this)">Pajamas</span>
+                <span class="cat-tab" onclick="setMainCategory('bibs', this)">Infants</span>
+            </div>
+
+            <div id="product-container"></div>
+        </main>
+    </div>
+
+    <footer>
+        <p>175 Mulberry St, New York, NY 10013</p>
+    </footer>
+
+    <script src="js/shop.js"></script>
+</body>
+
+</html>

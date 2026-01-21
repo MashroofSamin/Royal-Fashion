@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Product View | Royal Fashion NYC</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="css/product.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Images/logo.png" class="site-logo" alt="Royal Fashion Logo">
+            </a>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="cart.html">Bag (<span id="cart-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <main id="product-content">
+        <div class="product-detail-container">
+
+            <div class="product-image-gallery">
+                <div class="img-zoom-container">
+                    <img id="mainProductImg" src="" alt="Product Image">
+                    <div id="zoomResult" class="img-zoom-result"></div>
+                </div>
+            </div>
+
+            <div class="product-info-panel">
+                <div class="breadcrumb">Shop / Apparel</div>
+                <h1 class="product-title">Loading Product...</h1>
+                <div class="product-price">--</div>
+
+                <div class="selection-group">
+                    <label for="sizeSelect">Select Size</label>
+                    <select id="sizeSelect">
+                    </select>
+                </div>
+
+                <div class="purchase-actions">
+                    <button id="initial-add-btn" class="buy-button">Add to Bag</button>
+
+                    <div id="quantity-controls" class="quantity-toggle" style="display: none;">
+                        <button id="minus-btn">−</button>
+                        <span id="current-qty">1</span>
+                        <button id="plus-btn">+</button>
+                    </div>
+                </div>
+
+                <div class="detail-description">
+                    <p id="productDescription">Hand-selected quality from our Mulberry Street boutique.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>175 Mulberry St, New York, NY 10013</p>
+    </footer>
+
+    <script src="js/zoom.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

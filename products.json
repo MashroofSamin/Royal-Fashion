@@ -1,0 +1,330 @@
+[
+    {
+        "id": 1,
+        "name": "Classic Logo Tee",
+        "price": 45.00,
+        "category": "shirts",
+        "subcat": "T-Shirts",
+        "dept": "Men",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "white",
+            "black"
+        ],
+        "image": "Images/t-shirt.webp"
+    },
+    {
+        "id": 2,
+        "name": "Urban Crop Top",
+        "price": 35.00,
+        "category": "shirts",
+        "subcat": "Crop Tops",
+        "dept": "Women",
+        "sizes": [
+            "XS",
+            "S",
+            "M"
+        ],
+        "colors": [
+            "black",
+            "grey"
+        ],
+        "image": "Images/t-shirt.webp"
+    },
+    {
+        "id": 3,
+        "name": "Nolita Long Sleeve",
+        "price": 55.00,
+        "category": "longsleeves",
+        "subcat": "Long Sleeves",
+        "dept": "Unisex",
+        "sizes": [
+            "S",
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "grey",
+            "navy"
+        ],
+        "image": "Images/Sweatshirt.webp"
+    },
+    {
+        "id": 4,
+        "name": "Mulberry Street Hoodie",
+        "price": 115.00,
+        "category": "hoodies",
+        "subcat": "Hoodies",
+        "dept": "Unisex",
+        "sizes": [
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "green",
+            "black",
+            "navy"
+        ],
+        "image": "Images/Hoodie.webp"
+    },
+    {
+        "id": 5,
+        "name": "Downtown Windbreaker",
+        "price": 145.00,
+        "category": "jackets",
+        "subcat": "Jackets",
+        "dept": "Unisex",
+        "sizes": [
+            "S",
+            "M",
+            "L"
+        ],
+        "colors": [
+            "black",
+            "navy"
+        ],
+        "image": "Images/Jacket.webp"
+    },
+    {
+        "id": 6,
+        "name": "Royal Dad Hat",
+        "price": 28.00,
+        "category": "hats",
+        "subcat": "Hats",
+        "dept": "Unisex",
+        "sizes": [
+            "OS"
+        ],
+        "colors": [
+            "grey",
+            "black",
+            "white"
+        ],
+        "image": "Images/white-hat.webp"
+    },
+    {
+        "id": 7,
+        "name": "Silk Sleep Set",
+        "price": 85.00,
+        "category": "pajamas",
+        "subcat": "Pajamas",
+        "dept": "Women",
+        "sizes": [
+            "S",
+            "M",
+            "L"
+        ],
+        "colors": [
+            "white",
+            "navy"
+        ],
+        "image": "Images/Pajama.webp"
+    },
+    {
+        "id": 8,
+        "name": "Organic Cotton Bib",
+        "price": 18.00,
+        "category": "bibs",
+        "subcat": "Bibs",
+        "dept": "Infants",
+        "sizes": [
+            "OS"
+        ],
+        "colors": [
+            "white",
+            "green"
+        ],
+        "image": "Images/Bib.webp"
+    },
+    {
+        "id": 9,
+        "name": "Little Italy Onesie",
+        "price": 32.00,
+        "category": "shirts",
+        "subcat": "T-Shirts",
+        "dept": "Infants",
+        "sizes": [
+            "6M",
+            "12M",
+            "18M"
+        ],
+        "colors": [
+            "white"
+        ],
+        "image": "Images/Bib.webp"
+    },
+    {
+        "id": 10,
+        "name": "Soho Bomber Jacket",
+        "price": 185.00,
+        "category": "jackets",
+        "subcat": "Jackets",
+        "dept": "Men",
+        "sizes": [
+            "M",
+            "L",
+            "XL"
+        ],
+        "colors": [
+            "navy",
+            "black"
+        ],
+        "image": "Images/Jacket.webp"
+    },
+    {
+        "id": 11,
+        "name": "NYC Taxi Keychain",
+        "price": 8.00,
+        "category": "gifts",
+        "subcat": "Keychains",
+        "dept": "",
+        "sizes": "",
+        "colors": [
+            "yellow"
+        ],
+        "image": "Images/taxi-keychain.webp"
+    },
+    {
+        "id": 12,
+        "name": "Custom Name License Plate Keychain",
+        "price": 12.00,
+        "category": "gifts",
+        "subcat": "Keychains",
+        "dept": "",
+        "sizes": "",
+        "colors": [
+            "white",
+            "blue"
+        ],
+        "image": "Images/name-keychain.webp"
+    },
+    {
+        "id": 13,
+        "name": "New York Replica License Plate",
+        "price": 20.00,
+        "category": "gifts",
+        "subcat": "License Plates",
+        "dept": "",
+        "sizes": "",
+        "colors": [
+            "white",
+            "orange"
+        ],
+        "image": "Images/plate.webp"
+    },
+    {
+        "id": 14,
+        "name": "Mini Bike Plate",
+        "price": 15.00,
+        "category": "gifts",
+        "subcat": "License Plates",
+        "dept": "",
+        "sizes": "",
+        "colors": [
+            "white"
+        ],
+        "image": "Images/bike-plate.webp"
+    },
+    {
+        "id": 15,
+        "name": "Royal Fashion Coffee Mug",
+        "price": 18.00,
+        "category": "gifts",
+        "subcat": "Mugs",
+        "dept": "",
+        "sizes": [
+            "11oz"
+        ],
+        "colors": [
+            "white",
+            "black"
+        ],
+        "image": "Images/mug.webp"
+    },
+    {
+        "id": 16,
+        "name": "I ❤️ NY Classic Mug",
+        "price": 15.00,
+        "category": "gifts",
+        "subcat": "Mugs",
+        "dept": "",
+        "sizes": [
+            "11oz"
+        ],
+        "colors": [
+            "white"
+        ],
+        "image": "Images/iloveny-mug.webp"
+    },
+    {
+        "id": 17,
+        "name": "Insulated Mug with Lid (Short)",
+        "price": 25.00,
+        "category": "gifts",
+        "subcat": "Mugs",
+        "dept": "",
+        "sizes": [
+            "12oz"
+        ],
+        "colors": [
+            "navy",
+            "black"
+        ],
+        "image": "Images/short-lid-mug.webp"
+    },
+    {
+        "id": 18,
+        "name": "Insulated Tumbler with Lid (Tall)",
+        "price": 32.00,
+        "category": "gifts",
+        "subcat": "Mugs",
+        "dept": "",
+        "sizes": [
+            "20oz"
+        ],
+        "colors": [
+            "black",
+            "silver"
+        ],
+        "image": "Images/tall-lid-mug.webp"
+    },
+    {
+        "id": 19,
+        "name": "Mulberry St. Water Bottle",
+        "price": 28.00,
+        "category": "gifts",
+        "subcat": "Mugs",
+        "dept": "",
+        "sizes": [
+            "24oz"
+        ],
+        "colors": [
+            "silver",
+            "black"
+        ],
+        "image": "Images/water-bottle.webp"
+    },
+    {
+        "id": 20,
+        "name": "Empire State Snowglobe",
+        "price": 45.00,
+        "category": "gifts",
+        "subcat": "Snowglobes",
+        "dept": "",
+        "sizes": [
+            "Large"
+        ],
+        "colors": [
+            "blue",
+            "white"
+        ],
+        "image": "Images/snowglobe.webp"
+    }
+]

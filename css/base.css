@@ -1,0 +1,21 @@
+:root {
+    --brand-green: #39bd44;
+    --royal-blue: #007bff;
+    --white: #ffffff;
+    --dark: #121212;
+    --border: #eeeeee;
+    --gray-bg: #f9f9f9;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+}

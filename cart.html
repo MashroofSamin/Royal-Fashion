@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Your Bag | Royal Fashion NYC</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/shop.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Images/logo.png" class="site-logo" alt="Royal Fashion Logo">
+            </a>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+            <li><a href="cart.html" class="active">Bag (<span id="cart-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <div class="shop-main-wrapper cart-page-container">
+        <main class="cart-left">
+            <div class="line-header">
+                <h3>Shopping Bag</h3>
+            </div>
+
+            <div id="cart-items-container">
+            </div>
+        </main>
+
+        <aside class="cart-summary-sidebar">
+            <h2>Order Summary</h2>
+
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0.00</span>
+            </div>
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>$10.00</span>
+            </div>
+
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+
+            <p id="min-order-warning"
+                style="display: none; color: #d9534f; font-size: 0.8rem; margin-top: 15px; font-weight: bold;">
+                Minimum order is $40.00 to checkout.
+            </p>
+
+            <div class="policy-notice"
+                style="margin-top: 20px; padding: 12px; border: 1px solid #eee; background: #fafafa; border-radius: 4px;">
+                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="terms-agree" style="margin-top: 3px;">
+                    <span style="font-size: 0.8rem; color: #444; line-height: 1.4;">
+                        I understand all sales are final. <br>
+                        <strong>No refunds, returns, or exchanges.</strong>
+                    </span>
+                </label>
+            </div>
+
+            <button id="checkout-btn" class="buy-button" disabled
+                style="width: 100%; margin-top: 15px; font-size: 1rem; opacity: 0.5; cursor: not-allowed;">
+                Checkout
+            </button>
+
+            <p style="font-size: 0.75rem; color: #888; margin-top: 15px; text-align: center;">
+                Secure payment powered by Stripe.
+            </p>
+        </aside>
+
+        <footer>
+            <p>175 Mulberry St, New York, NY 10013</p>
+        </footer>
+
+        <script src="js/cart.js"></script>
+        <script>
+            // Inline updateCartCount for the cart page to ensure it's always synced
+            function updateCartCount() {
+                const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
+                const countElement = document.getElementById('cart-count');
+                if (countElement) {
+                    const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                    countElement.textContent = total;
+                }
+            }
+            document.addEventListener('DOMContentLoaded', updateCartCount);
+        </script>
+</body>
+
+</html>

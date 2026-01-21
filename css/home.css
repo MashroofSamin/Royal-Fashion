@@ -1,0 +1,35 @@
+/* --- HERO --- */
+.hero {
+    height: 85vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Images/LittleItaly.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-align: center;
+}
+
+.hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 5rem);
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.cta-button {
+    background: var(--brand-green);
+    color: var(--white) !important;
+    padding: 16px 32px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+    filter: brightness(0.9);
+}

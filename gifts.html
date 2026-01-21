@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gifts | Royal Fashion NYC</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/shop.css">
+</head>
+
+<body>
+    <nav>
+        <div class="logo-container">
+            <a href="index.html"><img src="Images/logo.png" class="site-logo" alt="Logo"></a>
+        </div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="apparel.html">Apparel</a></li>
+            <li><a href="cart.html">Bag (<span id="cart-count">0</span>)</a></li>
+        </ul>
+    </nav>
+
+    <div class="shop-main-wrapper">
+        <aside class="filter-sidebar">
+            <h2>Gift Filters</h2>
+
+            <details open>
+                <summary>Price Range</summary>
+                <div class="price-input-container">
+                    <div class="price-label">$<span id="range1">0</span></div>
+                    <div class="price-label">$<span id="range2">200</span></div>
+                </div>
+                <div class="price-slider-wrapper">
+                    <div class="slider-track" id="track"></div>
+                    <input type="range" min="0" max="200" value="0" id="slider-1" oninput="slideOne()">
+                    <input type="range" min="0" max="200" value="200" id="slider-2" oninput="slideTwo()">
+                </div>
+            </details>
+
+            <details open>
+                <summary>Color</summary>
+                <div class="color-filter-grid">
+                    <div class="color-option" style="background: white;" onclick="toggleColorFilter('white', this)">
+                    </div>
+                    <div class="color-option" style="background: black;" onclick="toggleColorFilter('black', this)">
+                    </div>
+                    <div class="color-option" style="background: grey;" onclick="toggleColorFilter('grey', this)"></div>
+                    <div class="color-option" style="background: navy;" onclick="toggleColorFilter('navy', this)"></div>
+                    <div class="color-option" style="background: yellow;" onclick="toggleColorFilter('yellow', this)">
+                    </div>
+                    <div class="color-option" style="background: orange;" onclick="toggleColorFilter('orange', this)">
+                    </div>
+                </div>
+            </details>
+        </aside>
+
+        <main class="product-area">
+            <div class="category-nav">
+                <span class="cat-tab active" onclick="setMainCategory('gifts', this)">All Gifts</span>
+                <span class="cat-tab" onclick="setMainCategory('Keychains', this)">Keychains</span>
+                <span class="cat-tab" onclick="setMainCategory('License Plates', this)">License Plates</span>
+                <span class="cat-tab" onclick="setMainCategory('Mugs', this)">Mugs</span>
+                <span class="cat-tab" onclick="setMainCategory('Snowglobes', this)">Snowglobes</span>
+            </div>
+
+            <div id="product-container"></div>
+        </main>
+    </div>
+
+    <footer>
+        <p>175 Mulberry St, New York, NY 10013</p>
+    </footer>
+
+    <script>
+        window.activeMainCategory = "gifts"; 
+    </script>
+
+    <script src="js/shop.js"></script>
+
+    <script>
+        // Slider Logic specific to this page's price range
+        const s1 = document.getElementById("slider-1");
+        const s2 = document.getElementById("slider-2");
+        const d1 = document.getElementById("range1");
+        const d2 = document.getElementById("range2");
+        const track = document.getElementById("track");
+
+        function fill() {
+            if (!s1 || !track) return;
+            let p1 = (s1.value / s1.max) * 100;
+            let p2 = (s2.value / s2.max) * 100;
+            track.style.background = `linear-gradient(to right, #ddd ${p1}%, var(--royal-blue) ${p1}%, var(--royal-blue) ${p2}%, #ddd ${p2}%)`;
+        }
+
+        function slideOne() {
+            if (parseInt(s2.value) - parseInt(s1.value) <= 10) s1.value = parseInt(s2.value) - 10;
+            d1.textContent = s1.value;
+            fill();
+            if (typeof applyFilters === 'function') applyFilters();
+        }
+
+        function slideTwo() {
+            if (parseInt(s2.value) - parseInt(s1.value) <= 10) s2.value = parseInt(s1.value) + 10;
+            d2.textContent = s2.value;
+            fill();
+            if (typeof applyFilters === 'function') applyFilters();
+        }
+
+        window.addEventListener('load', fill);
+    </script>
+</body>
+
+</html>
