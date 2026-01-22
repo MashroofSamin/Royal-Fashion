@@ -1,21 +1,44 @@
+
 /* --- HERO --- */
 .hero {
-    height: 85vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Images/LittleItaly.png');
+    height: 450px; /* This gives you that 3:1 banner resolution */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../Images/LittleItaly.png');
     background-size: cover;
     background-position: center;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--white);
+    align-items: center; /* Vertical center */
+    justify-content: center; /* Horizontal center */
     text-align: center;
+    width: 100%;
+    color: #ffffff; /* Global white text for the hero */
+}
+
+.hero-text {
+    width: 100%;
+    max-width: 800px; /* Keeps text from getting too wide */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Ensures all children like <h2> are centered */
 }
 
 .hero-text h1 {
+    color: #ffffff !important; /* Forces font to White instead of Black */
     font-family: 'Playfair Display', serif;
     font-size: clamp(3rem, 8vw, 5rem);
-    margin-bottom: 20px;
-    line-height: 1.2;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.hero-text h2, .hero-text p {
+    color: #ffffff; /* Ensures the Little Italy and Address are white */
+    margin: 0 auto; /* Centers the block */
+}
+
+.hero-btns {
+    display: flex;
+    gap: 15px; /* Spacing between buttons without needing inline margins */
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .cta-button {
@@ -26,10 +49,150 @@
     font-weight: bold;
     text-transform: uppercase;
     font-size: 0.85rem;
-    display: inline-block;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    border-radius: 2px; /* Slight round for a modern look */
 }
 
 .cta-button:hover {
-    filter: brightness(0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    filter: b
+    rightness(1.1);
+}
+
+.nyc-collection {
+    padding-top: 50px; /* Adjust this number higher or lower to get the look you want */
+    text-align: center;
+}
+
+/* --- THE NYC COLLECTION GRID --- */
+.three-column-grid {
+    display: flex; /* Lines them up horizontally */
+    gap: 15px; /* Space between the boxes */
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-box {
+    flex: 1; /* Makes all 3 boxes equal width */
+    position: relative;
+    height: 400px; /* Adjust this to control how tall the boxes are */
+    overflow: hidden;
+}
+
+.image-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Keeps images from stretching */
+    filter: brightness(0.7); /* Dims image so white text/buttons pop */
+}
+
+/* --- OVERLAY TEXT & BUTTONS --- */
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centers text and button perfectly */
+    text-align: center;
+    width: 100%;
+}
+
+.overlay-text h3 {
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+/* The White "Shop Now" Button Style */
+.shop-now-btn {
+    background: #ffffff;
+    color: #000000;
+    padding: 10px 25px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: inline-block;
+    text-transform: uppercase;
+    border: none;
+}
+
+/* --- MOBILE VIEW: Same for Desktop and Mobile --- */
+@media (max-width: 768px) {
+    .three-column-grid {
+        flex-direction: column; /* Stacks boxes on small phones */
+    }
+    
+    .category-box {
+        height: 300px; /* Slightly shorter boxes on mobile */
+    }
+}
+
+.best-sellers {
+    padding: 50px 0;
+    text-align: center;
+    background-color: #fff;
+}
+
+.section-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.carousel-container {
+    width: 100%;
+    overflow: hidden; 
+    position: relative;
+    cursor: grab;
+    padding: 10px 0;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 15px;
+    width: max-content;
+    /* Remove the animation line entirely */
+    will-change: transform;
+    cursor: grab;
+}
+
+.carousel-track:hover {
+    animation-play-state: paused;
+}
+
+/* --- UNIFORM BEST SELLER ITEMS --- */
+.best-seller-item {
+    width: 180px;  /* Matches the small square size in your mockup */
+    height: 180px;
+    background-color: #f4f4f4; /* Light grey box from your example */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevents images from being squashed */
+}
+
+.best-seller-item img {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+}
+
+/* The Slow-Motion Animation */
+@keyframes scrollLinear {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+.carousel-track:active {
+    cursor: grabbing;
 }

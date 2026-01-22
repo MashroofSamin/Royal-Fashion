@@ -1,7 +1,6 @@
 let currentProduct = null;
 let selectedSize = null; 
 
-// 1. Core Loader
 async function loadProductDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
@@ -12,6 +11,7 @@ async function loadProductDetails() {
         currentProduct = products.find(p => p.id === productId);
 
         if (currentProduct) {
+            // 1. Basic Info Updates
             document.title = `${currentProduct.name} | Royal Fashion NYC`;
             document.querySelector('.breadcrumb').innerText = `Shop / ${currentProduct.dept} / ${currentProduct.subcat}`;
             document.querySelector('.product-title').innerText = currentProduct.name;
@@ -21,42 +21,68 @@ async function loadProductDetails() {
             mainImg.src = currentProduct.image;
             mainImg.alt = currentProduct.name;
 
-            // --- SIZE TILE LOGIC ---
-            const sizeGrid = document.getElementById('size-grid');
-            if (sizeGrid && currentProduct.sizes) {
-                // Generate the HTML for the tiles
-                sizeGrid.innerHTML = currentProduct.sizes.map((size, index) =>
-                    `<div class="size-tile ${index === 0 ? 'selected' : ''}" data-size="${size}">${size}</div>`
-                ).join('');
+            // 2. Grids and Sections
+            const infantGrid = document.getElementById('infant-grid');
+            const kidsGrid = document.getElementById('kids-grid');
+            const womenGrid = document.getElementById('women-grid');
+            const adultGrid = document.getElementById('adult-grid');
 
-                // Set initial size selection
-                selectedSize = currentProduct.sizes[0];
+            if (currentProduct.sizes) {
+                // Clear and Hide Everything First
+                [infantGrid, kidsGrid, womenGrid, adultGrid].forEach(grid => { if (grid) grid.innerHTML = ''; });
+                ['infant-section', 'kids-section', 'women-section', 'adult-section'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'none';
+                });
 
-                // Attach click listeners to the new tiles
-                document.querySelectorAll('.size-tile').forEach(tile => {
+                // 3. Sorting Logic Loop
+                currentProduct.sizes.forEach((size, index) => {
+                    const tile = document.createElement('div');
+                    tile.className = `size-tile ${index === 0 ? 'selected' : ''}`;
+                    tile.setAttribute('data-size', size);
+                    tile.innerText = size;
+
                     tile.onclick = function() {
                         document.querySelectorAll('.size-tile').forEach(t => t.classList.remove('selected'));
                         this.classList.add('selected');
                         selectedSize = this.getAttribute('data-size'); 
                         updateUIFromCart(); 
                     };
+
+                    // --- PLACE YOUR RULE 1 HERE ---
+                    const sizeLower = size.toLowerCase();
+
+                    if (sizeLower.includes("women")) {
+                        const wGrid = document.getElementById('women-grid');
+                        const wSection = document.getElementById('women-section');
+                        if (wGrid && wSection) {
+                            wGrid.appendChild(tile);
+                            wSection.style.display = 'block';
+                        }
+                    } 
+                    // Then follow with Rule 2, 3, etc.
+                    else if (size.includes("Months") || size.includes("2T")) {
+                        infantGrid.appendChild(tile);
+                        document.getElementById('infant-section').style.display = 'block';
+                    } 
+                    else if (size.includes("(")) {
+                        kidsGrid.appendChild(tile);
+                        document.getElementById('kids-section').style.display = 'block';
+                    } 
+                    else {
+                        adultGrid.appendChild(tile);
+                        document.getElementById('adult-section').style.display = 'block';
+                    }
+
+                    if (index === 0) selectedSize = size;
                 });
             }
 
-            // Important: update UI after sizes are set
             updateUIFromCart();
 
             mainImg.onload = () => {
                 if (typeof initZoom === "function") initZoom("mainProductImg", "zoomResult");
             };
-
-            const container = document.querySelector('.img-zoom-container');
-            const result = document.getElementById('zoomResult');
-            if (container && result) {
-                container.addEventListener('mouseenter', () => result.style.visibility = 'visible');
-                container.addEventListener('mouseleave', () => result.style.visibility = 'hidden');
-            }
-
         } else {
             document.querySelector('.product-detail-container').innerHTML = `<h1>Product not found</h1>`;
         }
@@ -64,6 +90,7 @@ async function loadProductDetails() {
         console.error("Error loading product details:", error);
     }
 }
+
 
 // 2. Global Nav Update
 function updateCartCount() {

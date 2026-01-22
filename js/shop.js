@@ -29,6 +29,8 @@ function setMainCategory(cat, element) {
     applyFilters();
 }
 
+
+
 function toggleColorFilter(color, element) {
     if (activeColorFilters.includes(color)) {
         activeColorFilters = activeColorFilters.filter(c => c !== color);
@@ -76,12 +78,25 @@ function applyFilters() {
     const minP = s1 ? parseInt(s1.value) : 0;
     const maxP = s2 ? parseInt(s2.value) : 1000;
 
-    // Use 'products' (the global list we loaded in loadProducts)
+    // --- SMARTER PAGE DETECTION ---
+    const path = window.location.pathname.toLowerCase();
+    
+    // This checks if "gifts" is anywhere in the URL name
+    const isGiftsPage = path.includes("gifts");
+
     const filtered = products.filter(p => {
+        // 1. PAGE CHECK
+        // If we are on the gifts page, only show "gifts". Otherwise, show "apparel".
+        const matchesPage = isGiftsPage ? (p.mainCategory === "gifts") : (p.mainCategory === "apparel");
+
+        if (!matchesPage) return false; 
+
+        // 2. CATEGORY CHECK
         const matchCat = activeMainCategory === "all" ||
             p.category === activeMainCategory ||
             p.subcat === activeMainCategory;
 
+        // 3. OTHER FILTERS
         const matchDept = selectedDepts.length === 0 || selectedDepts.includes(p.dept);
         const matchColor = activeColorFilters.length === 0 || p.colors.some(c => activeColorFilters.includes(c));
         const matchPrice = p.price >= minP && p.price <= maxP;
@@ -89,7 +104,6 @@ function applyFilters() {
         return matchCat && matchDept && matchColor && matchPrice;
     });
 
-    // Pass the filtered list to your row-building function
     renderRows(filtered);
 }
 
@@ -99,6 +113,33 @@ function renderRows(data) {
     const container = document.getElementById('product-container');
     if (!container) return;
     container.innerHTML = "";
+
+    // 1. STYLED "BACK TO ALL" BUTTON
+    if (activeMainCategory !== "all") {
+        const backContainer = document.createElement('div');
+        backContainer.style.textAlign = "center";
+        backContainer.style.padding = "20px 0";
+
+        backContainer.innerHTML = `
+            <button onclick="setMainCategory('all')" 
+                style="background-color: #f8f9fa; 
+                       color: #002366; 
+                       border: 1px solid #002366; 
+                       padding: 10px 20px; 
+                       font-weight: bold; 
+                       cursor: pointer; 
+                       border-radius: 4px;
+                       font-size: 0.9rem;
+                       transition: 0.3s;
+                       display: inline-flex;
+                       align-items: center;
+                       gap: 10px;
+                       text-transform: uppercase;">
+                <span style="font-size: 1.2rem;">←</span> Back to All Categories
+            </button>
+        `;
+        container.appendChild(backContainer);
+    }
 
     const subcategories = [...new Set(data.map(p => p.subcat))].sort();
 
@@ -118,16 +159,30 @@ function renderRows(data) {
                 ${items.map(item => `
                     <a href="product-detail.html?id=${item.id}" class="product-link">
                         <div class="product-card">
-                            <div class="card-img-placeholder">
-                                <img src="${item.image}" alt="${item.name}" class="product-img">
-                            </div>
-                            <div style="font-size: 0.75rem; color: #888; text-transform: uppercase; margin-bottom: 5px;">${item.dept}</div>
-                            <h4 style="font-size: 1.1rem; margin-bottom: 10px;">${item.name}</h4>
-                            <p style="font-weight: bold; color: var(--brand-green); font-size: 1.2rem; margin-bottom: 15px;">$${item.price.toFixed(2)}</p>
+                            <img src="${item.image}" alt="${item.name}" class="product-img">
+                            <h4 style="font-size: 1.1rem;">${item.name}</h4>
+                            <p style="font-weight: bold; color: var(--brand-green);">$${item.price.toFixed(2)}</p>
                             <button class="buy-button">View Details</button>
                         </div>
                     </a>
                 `).join('')}
+            </div>
+            <div style="text-align: center; margin-top: 20px; padding-bottom: 40px;">
+                <button class="view-more-btn" 
+                    onclick="zoomToSubcategory('${sub}')"
+                    style="background-color: white; 
+                           color: #002366; 
+                           border: 2px solid #002366; 
+                           padding: 12px 28px; 
+                           font-weight: bold; 
+                           text-transform: uppercase; 
+                           cursor: pointer; 
+                           border-radius: 4px;
+                           font-size: 0.85rem;
+                           letter-spacing: 1px;
+                           transition: 0.3s;">
+                    View More ${sub}
+                </button>
             </div>
         `;
         container.appendChild(section);
@@ -191,6 +246,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function zoomToSubcategory(subName) {
+    // 1. Set the global filter to the subcategory name
+    activeMainCategory = subName;
+
+    // 2. Scroll to the top of the page so the user sees the new results
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 3. Re-run the filters
+    applyFilters();
+
+    // 4. (Optional) Add a "Back to All" button or update the UI
+    console.log("Viewing more of: " + subName);
+}
 
 // Run everything inside ONE listener to prevent double-firing
 document.addEventListener('DOMContentLoaded', () => {

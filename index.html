@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Fashion | 175 Mulberry St NYC</title>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
@@ -31,21 +29,125 @@
 
     <header class="hero">
         <div class="hero-text">
-            <h2 style="text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; margin-bottom: 10px;">Welcome to
-                Little Italy</h2>
-            <h1>ROYAL FASHION</h1>
-            <p style="font-weight: 600; margin-bottom: 30px;">175 Mulberry Street</p>
+            <p style="text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; margin-bottom: 10px; opacity: 0.9;">Welcome to Little Italy</p>
+            <h1 style="padding-top: 10px;">ROYAL FASHION</h1>
+            <p style="font-weight: 600; letter-spacing: 1px;">175 Mulberry Street</p>
+            
             <div class="hero-btns">
                 <a href="apparel.html" class="cta-button">Shop Apparel</a>
-                <a href="gifts.html" class="cta-button"
-                    style="margin-left:10px; background: #39bd44; color: #ffffff !important;">Browse Gifts</a>
+                <a href="gifts.html" class="cta-button" style="background: #39bd44;">Browse Gifts</a>
             </div>
         </div>
     </header>
 
+    <main class="container">
+        <section class="nyc-collection" style="text-align: center;">
+            <h2 class="section-title">THE NYC COLLECTION</h2>
+            
+            <div class="three-column-grid">
+                <div class="category-box">
+                    <div class="image-wrapper">
+                        <img src="Images/ILNYhome.png" alt="I Love NY">
+                        <div class="overlay-text">
+                            <h3>I ❤️ NY</h3>
+                            <a href="apparel.html" class="shop-now-btn">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-box">
+                    <div class="image-wrapper">
+                        <img src="Images/fdnynypdhome.png" alt="NYPD and FDNY">
+                        <div class="overlay-text">
+                            <h3>NYPD & FDNY HEROES</h3>
+                            <a href="apparel.html" class="shop-now-btn">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-box">
+                    <div class="image-wrapper">
+                        <img src="Images/Italyhomepic.png" alt="Mommy's Little Meatball">
+                        <div class="overlay-text">
+                            <h3>MOMMY'S LITTLE MEATBALL</h3>
+                            <a href="apparel.html" class="shop-now-btn">SHOP NOW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="best-sellers">
+        <h2 class="section-title" style="text-align: center;">BEST SELLERS</h2>
+        
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="best-seller-item"><img src="Images/Pajama.webp" alt="PAJAMAS"></div>
+                <div class="best-seller-item"><img src="Images/statue.webp" alt="STATUES"></div>
+                <div class="best-seller-item"><img src="Images/lisencePlateHome.png" alt="LICENSE PLATES"></div>
+                <div class="best-seller-item"><img src="Images/funnyshirt.png" alt="FUNNY SHIRTS"></div>
+                <div class="best-seller-item"><img src="Images/blacknyhat.png" alt="CAPS"></div>
+                <div class="best-seller-item"><img src="Images/chocmug.webp" alt="MUGS"></div>
+                <div class="best-seller-item"><img src="Images/namekeychain.webp" alt="NAMED KEYCHAINS"></div>
+                <div class="best-seller-item"><img src="Images/snowglobe.webp" alt="SNOWGLOBES"></div>
+                <div class="best-seller-item"><img src="Images/ToteBag1624.webp" alt="TOTE BAGS"></div>
+                <div class="best-seller-item"><img src="Images/Pajama.webp" alt="PAJAMAS"></div>
+                <div class="best-seller-item"><img src="Images/statue.webp" alt="STATUES"></div>
+                <div class="best-seller-item"><img src="Images/lisencePlateHome.png" alt="LICENSE PLATES"></div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <p>175 Mulberry St, New York, NY 10013</p>
     </footer>
-</body>
 
+        <script>
+            const track = document.getElementById('carouselTrack');
+            let isDown = false;
+            let startX;
+            let scrollLeft = 0;
+            let autoScrollPos = 0;
+            let isPaused = false;
+
+            // --- AUTO SCROLL LOGIC ---
+            function step() {
+                if (!isDown && !isPaused) {
+                    autoScrollPos -= 0.5; // Adjust this number to change auto-speed
+                    // Reset loop if it goes too far
+                    if (Math.abs(autoScrollPos) >= track.scrollWidth / 2) {
+                        autoScrollPos = 0;
+                    }
+                    track.style.transform = `translateX(${autoScrollPos}px)`;
+                }
+                requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+
+            // --- DRAG LOGIC ---
+            track.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - track.offsetLeft;
+                scrollLeft = autoScrollPos;
+            });
+
+            track.addEventListener('mouseleave', () => { isDown = false; });
+            track.addEventListener('mouseup', () => { isDown = false; });
+
+            track.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - track.offsetLeft;
+                const walk = (x - startX); 
+                autoScrollPos = scrollLeft + walk;
+                track.style.transform = `translateX(${autoScrollPos}px)`;
+            });
+
+            // Pause auto-scroll on hover
+            track.addEventListener('mouseenter', () => { isPaused = true; });
+            track.addEventListener('mouseleave', () => { isPaused = false; });
+        </script>
+
+</body>
 </html>
