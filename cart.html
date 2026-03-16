@@ -33,9 +33,7 @@
             <div class="line-header">
                 <h3>Shopping Bag</h3>
             </div>
-
-            <div id="cart-items-container">
-            </div>
+            <div id="cart-items-container"></div>
         </main>
 
         <aside class="cart-summary-sidebar">
@@ -75,24 +73,24 @@
                 Secure payment powered by Stripe.
             </p>
         </aside>
-        </div>
-        <footer>
-            <p>175 Mulberry St, New York, NY 10013</p>
-        </footer>
+    </div>
 
-        <script src="js/cart.js"></script>
-        <script>
-            // Inline updateCartCount for the cart page to ensure it's always synced
-            function updateCartCount() {
-                const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
-                const countElement = document.getElementById('cart-count');
-                if (countElement) {
-                    const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                    countElement.textContent = total;
-                }
+    <footer>
+        <p>175 Mulberry St, New York, NY 10013</p>
+    </footer>
+
+    <script src="js/cart.js"></script>
+    <script>
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
+            const countElement = document.getElementById('cart-count');
+            if (countElement) {
+                const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                countElement.textContent = total;
             }
-            document.addEventListener('DOMContentLoaded', updateCartCount);
-        </script>
-</body>
+        }
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+    </script>
 
+</body>
 </html>

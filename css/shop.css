@@ -1,16 +1,21 @@
 /* --- SHOP LAYOUT --- */
 .shop-main-wrapper {
     display: flex;
-    flex-wrap: wrap; /* This allows the sidebar to drop BELOW the products on mobile */
-    max-width: 1400px;
-    width: 95%;      /* Gives a little breathing room on the edges */
+    flex-direction: row;
+    width: 95%;
     margin: 20px auto;
-    gap: 20px;       /* Smaller gap for mobile */
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.product-area {
+    flex: 1;
+    min-width: 0;
 }
 
 .three-column-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 40px 0;
 }
@@ -18,14 +23,14 @@
 .category-box {
     position: relative;
     overflow: hidden;
-    height: 450px; /* Adjust based on how tall you want the boxes */
+    height: 450px;
 }
 
 .image-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* This prevents the images from stretching */
-    filter: brightness(0.8); /* Dims image slightly so white text pops */
+    object-fit: cover;
+    filter: brightness(0.8);
 }
 
 .overlay-text {
@@ -49,15 +54,9 @@
     font-size: 0.8rem;
 }
 
-/* Mobile Fix: Stacks them on top of each other on small screens */
-@media (max-width: 768px) {
-    .three-column-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
+/* --- FILTER SIDEBAR --- */
 .filter-sidebar {
-    width: 260px;
+    width: 240px;
     flex-shrink: 0;
 }
 
@@ -70,7 +69,6 @@
     padding-bottom: 5px;
 }
 
-/* --- FILTERS --- */
 .filter-options {
     display: flex;
     flex-direction: column;
@@ -157,11 +155,10 @@ input[type="range"]::-webkit-slider-thumb {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-/* --- COLOR FILTER FIX --- */
+/* --- COLOR FILTER --- */
 .color-filter-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    /* 5 circles per row */
     gap: 10px;
     padding: 10px 0;
 }
@@ -170,10 +167,8 @@ input[type="range"]::-webkit-slider-thumb {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    /* Makes them circles */
     cursor: pointer;
     border: 1px solid #ddd;
-    /* Light border so white circles are visible */
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
@@ -182,6 +177,12 @@ input[type="range"]::-webkit-slider-thumb {
     border-color: var(--brand-green);
 }
 
+.color-option.selected {
+    border: 2px solid var(--brand-green);
+    box-shadow: 0 0 5px rgba(57, 189, 68, 0.5);
+}
+
+/* --- CATEGORY NAV --- */
 .category-nav {
     display: flex;
     gap: 25px;
@@ -189,7 +190,6 @@ input[type="range"]::-webkit-slider-thumb {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
     overflow-x: auto;
-    /* For mobile scrolling */
 }
 
 .cat-tab {
@@ -207,55 +207,15 @@ input[type="range"]::-webkit-slider-thumb {
     color: var(--dark);
 }
 
-.purchase-actions {
-    margin-top: 20px;
-}
-
-.quantity-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #f4f4f4;
-    border: 1px solid var(--brand-green);
-    border-radius: 4px; /* Essential for the look */
-    overflow: hidden;   /* Keeps buttons inside the rounded corners */
-    width: 100%;
-    max-width: 320px;
-}
-
-.quantity-toggle button {
-    background: var(--brand-green);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: 0.2s;
-    font-weight: bold; /* Added from second choice */
-}
-
-.quantity-toggle span {
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: var(--dark);
-    padding: 0 20px;
-}
-
 .cat-tab.active {
     color: var(--brand-green);
     border-bottom: 2px solid var(--brand-green);
     padding-bottom: 10px;
 }
 
-.color-option.selected {
-    border: 2px solid var(--brand-green);
-    box-shadow: 0 0 5px rgba(57, 189, 68, 0.5);
-}
-
-/* --- PRODUCT GRID SYSTEM --- */
+/* --- PRODUCT GRID --- */
 .category-section {
     width: 100%;
-    max-width: 1200px;
     margin-bottom: 60px;
 }
 
@@ -274,22 +234,17 @@ input[type="range"]::-webkit-slider-thumb {
 
 .product-grid {
     display: grid;
-    /* This forces the browser to create multiple columns */
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     width: 100%;
 }
 
-/* Removes default link underlining from product cards */
 .product-link {
     text-decoration: none;
     color: inherit;
-    /* Keeps text colors as defined in your card styles */
     display: block;
-    /* Ensures the entire card remains clickable */
 }
 
-/* Optional: Ensures no underline appears even when hovering */
 .product-link:hover {
     text-decoration: none;
 }
@@ -302,9 +257,8 @@ input[type="range"]::-webkit-slider-thumb {
     display: flex;
     flex-direction: column;
     height: 100%;
-    /* Prevent the card from growing infinitely */
-    max-width: 320px;
-    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .product-card:hover {
@@ -312,40 +266,22 @@ input[type="range"]::-webkit-slider-thumb {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-.card-img-placeholder {
-    width: 100%;
-    height: 250px;
-    /* Force a consistent height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f9f9f9;
-    margin-bottom: 10px;
-    overflow: hidden;
-}
-
 .product-img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 220px;
     object-fit: contain;
     display: block;
-    margin: auto;
-}
-
-.product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    margin-bottom: 10px;
 }
 
 .product-card h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 10px 0;
     color: var(--dark);
 }
 
 .product-card p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--brand-green);
     margin-bottom: 15px;
@@ -367,41 +303,77 @@ input[type="range"]::-webkit-slider-thumb {
     background: #2e9b37;
 }
 
-/* --- RESPONSIVE ADJUSTMENTS --- */
-@media (max-width: 768px) {
-.shop-main-wrapper {
-        flex-direction: column;
-        padding: 0 15px;
-    }
-
-/* 2. Make the sidebar and cart summary full width */
-    .filter-sidebar, 
-    .cart-summary-sidebar {
-        width: 100% !important;
-        position: static; /* Stops the sidebar from being "sticky" on mobile */
-    }
-
-    /* 3. Adjust the product grid for smaller screens */
-    .product-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-        gap: 10px;
-    }
-
-    /* 4. Shrink the cart item images so they fit */
-img {
-    max-width: 100%;
-    height: auto;
+/* --- VIEW MORE BUTTON --- */
+#product-container .view-more-btn {
+    display: inline-block !important;
+    background-color: #ffffff !important;
+    color: #002366 !important;
+    border: 2px solid #002366 !important;
+    padding: 10px 24px !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
+    margin-top: 10px !important;
+    margin-bottom: 30px !important;
 }
 
-/* --- NEW: CART PAGE SYSTEM --- */
+#product-container .view-more-btn:hover {
+    background-color: #002366 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+}
+
+/* --- PURCHASE ACTIONS --- */
+.purchase-actions {
+    margin-top: 20px;
+}
+
+.quantity-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f4f4;
+    border: 1px solid var(--brand-green);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 320px;
+}
+
+.quantity-toggle button {
+    background: var(--brand-green);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+
+.quantity-toggle button:hover {
+    background: #2e9b37;
+}
+
+.quantity-toggle span {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--dark);
+    padding: 0 20px;
+}
+
+/* --- CART --- */
 .cart-page-container {
-    align-items: flex-start;
+    padding-bottom: 60px;
 }
 
 .cart-left {
     flex-grow: 1;
     margin-right: 40px;
-    /* Adds breathing room between the items and the summary */
 }
 
 .cart-item {
@@ -418,6 +390,12 @@ img {
     background: #f9f9f9;
     object-fit: contain;
     border: 1px solid #eee;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cart-item-img:hover {
+    transform: scale(1.02);
 }
 
 .item-info {
@@ -437,7 +415,6 @@ img {
     font-size: 0.9rem;
 }
 
-/* --- CART QUANTITY ADJUSTER --- */
 .qty-adjuster {
     display: inline-flex;
     align-items: center;
@@ -446,7 +423,6 @@ img {
     border-radius: 4px;
     margin: 10px 0;
     overflow: hidden;
-    /* Keeps button corners clean */
 }
 
 .qty-adjuster button {
@@ -510,10 +486,6 @@ img {
     color: var(--dark);
 }
 
-.quantity-toggle button:hover {
-    background: #2e9b37;
-}
-
 .item-price-total {
     font-weight: bold;
     font-size: 1.1rem;
@@ -522,24 +494,18 @@ img {
     text-align: right;
 }
 
-/* Only applies to the images inside the cart */
-.cart-item-img {
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.cart-item-img:hover {
-    transform: scale(1.02); /* Makes the image slightly grow when hovered */
-}
-
+/* --- SIZE GRID --- */
 .size-grid {
     display: flex;
     gap: 10px;
     margin: 15px 0;
+    flex-wrap: wrap;
 }
 
 .size-tile {
-    width: 40px;
+    min-width: 50px;
+    width: auto;
+    padding: 0 12px;
     height: 40px;
     border: 1px solid #ddd;
     display: flex;
@@ -548,6 +514,7 @@ img {
     cursor: pointer;
     font-weight: bold;
     transition: 0.2s;
+    white-space: nowrap;
 }
 
 .size-tile.selected {
@@ -556,13 +523,15 @@ img {
     border-color: var(--brand-green);
 }
 
+/* --- SHIPPING TRACKER --- */
 .shipping-tracker-container {
     background: #fff;
     padding: 20px;
     border: 1px solid #eee;
-    margin-bottom: 30px; /* Space before products start */
+    margin-bottom: 30px;
     text-align: center;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 #shipping-message {
@@ -577,78 +546,26 @@ img {
 .progress-bar-bg {
     width: 100%;
     max-width: 500px;
-    height: 10px; /* Slightly taller for better visibility */
+    height: 10px;
     background: #f0f0f0;
     border-radius: 10px;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid #eee; /* Light border for definition */
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); /* Adds an "inner" depth */
+    border: 1px solid #eee;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .progress-bar-fill {
-    width: 0%; 
+    width: 0%;
     height: 100%;
-    background: #39bd44; 
+    background: #39bd44;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 10px rgba(57, 189, 68, 0.3); /* Soft glow to make the green pop */
+    box-shadow: 0 0 10px rgba(57, 189, 68, 0.3);
 }
 
-.shipping-tracker-container {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    border-radius: 8px;
-    border: 1px solid #eee;
-}
-
-.cart-page-container {
-    padding-bottom: 60px; /* Space between the cart summary and the footer */
-}
-
-
-/* Using the container ID makes the selector stronger so it won't be ignored */
-#product-container .view-more-btn {
-    display: inline-block !important;
-    background-color: #ffffff !important;
-    color: #002366 !important; /* Royal Blue */
-    border: 2px solid #002366 !important;
-    padding: 10px 24px !important;
-    font-size: 0.9rem !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease-in-out !important;
-    margin-top: 10px !important;
-    margin-bottom: 30px !important;
-}
-
-#product-container .view-more-btn:hover {
-    background-color: #002366 !important;
-    color: #ffffff !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
-}
-
-.group-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #999;
-    margin: 15px 0 5px 0;
-    letter-spacing: 0.5px;
-}
-
-/* This handles the container for each size group */
-#infant-section, 
-#kids-section, 
-#women-section, 
-#adult-section {
-    margin-bottom: 30px;
-    width: 100%;
-}
-
-/* This styles the "Women's Sizing", "Youth / Kids" labels */
-.group-title, .bucket-title {
+/* --- SIZE BUCKET LABELS --- */
+.group-title,
+.bucket-title {
     display: block;
     font-size: 0.75rem;
     font-weight: 700;
@@ -660,4 +577,74 @@ img {
     padding-bottom: 5px;
 }
 
+#infant-section,
+#kids-section,
+#women-section,
+#adult-section {
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+/* ================================
+   MOBILE — single media query
+   ================================ */
+@media (max-width: 768px) {
+
+    .shop-main-wrapper {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
+    .filter-sidebar {
+        display: none;
+    }
+
+    .product-area {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .category-nav {
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+    }
+
+    .product-card {
+        max-width: 100% !important;
+    }
+
+    .product-img {
+        height: 180px !important;
+    }
+
+    .three-column-grid {
+        grid-template-columns: 1fr;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .cart-summary-sidebar {
+        width: 100% !important;
+        position: static;
+    }
+
+    .cart-left {
+        margin-right: 0;
+    }
+
+    .cart-item {
+        flex-wrap: wrap;
+    }
 }

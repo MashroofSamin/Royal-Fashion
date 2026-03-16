@@ -1,20 +1,29 @@
 let products = [];
 let activeMainCategory = window.activeMainCategory || "all";
 let activeColorFilters = [];
-window.refreshGlobalCart = updateCartCount;
+window.refreshGlobalCart = function() { updateCartCount(); };
 
+const SUPABASE_URL = 'https://gouaisrlgkgrfymqsqas.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdWFpc3JsZ2tncmZ5bXFzcWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MzI3NDEsImV4cCI6MjA4OTIwODc0MX0.wES6GjiS0D5FojHQEiTrE9SLAW-ep3BnxMuBlarC6wE'
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 async function loadProducts() {
     try {
-        const response = await fetch('products.json');
-        products = await response.json(); 
+        const { data, error } = await db
+            .from('products')
+            .select('*')
+
+        if (error) throw error
+
+        products = data;
+        console.log('Products from Supabase:', products);
         
-        // This ensures the slider exists before trying to color it
+
         if (document.getElementById("slider-1")) {
             fillSlider();
         }
 
-        applyFilters(); 
-        updateCartCount(); 
+        applyFilters();
+        updateCartCount();
     } catch (error) {
         console.error("Error loading products:", error);
     }
@@ -87,14 +96,15 @@ function applyFilters() {
     const filtered = products.filter(p => {
         // 1. PAGE CHECK
         // If we are on the gifts page, only show "gifts". Otherwise, show "apparel".
-        const matchesPage = isGiftsPage ? (p.mainCategory === "gifts") : (p.mainCategory === "apparel");
+        const matchesPage = isGiftsPage ? (p.maincategory === "gifts") : (p.maincategory === "apparel");
 
         if (!matchesPage) return false; 
 
         // 2. CATEGORY CHECK
-        const matchCat = activeMainCategory === "all" ||
-            p.category === activeMainCategory ||
-            p.subcat === activeMainCategory;
+        const matchCat = activeMainCategory === "all" || 
+        activeMainCategory === "gifts" ||
+        p.category === activeMainCategory ||
+        p.subcat === activeMainCategory;
 
         // 3. OTHER FILTERS
         const matchDept = selectedDepts.length === 0 || selectedDepts.includes(p.dept);
@@ -115,7 +125,7 @@ function renderRows(data) {
     container.innerHTML = "";
 
     // 1. STYLED "BACK TO ALL" BUTTON
-    if (activeMainCategory !== "all") {
+    if (activeMainCategory !== "all" && activeMainCategory !== "gifts") {
         const backContainer = document.createElement('div');
         backContainer.style.textAlign = "center";
         backContainer.style.padding = "20px 0";
@@ -141,7 +151,19 @@ function renderRows(data) {
         container.appendChild(backContainer);
     }
 
-    const subcategories = [...new Set(data.map(p => p.subcat))].sort();
+    const preferredOrder = [
+        'T-Shirts', 'Crop Tops', 'Long Sleeves', 'Hoodies', 
+        'Jackets', 'Pajamas', 'Hats', 'Bags', 'Bibs', 'Onesies'
+    ];
+
+    const subcategories = [...new Set(data.map(p => p.subcat))].sort((a, b) => {
+        const ai = preferredOrder.indexOf(a);
+        const bi = preferredOrder.indexOf(b);
+        if (ai === -1 && bi === -1) return a.localeCompare(b);
+        if (ai === -1) return 1;
+        if (bi === -1) return -1;
+        return ai - bi;
+    });
 
     if (data.length === 0) {
         container.innerHTML = `<p style="padding: 20px;">No products found matching your filters.</p>`;

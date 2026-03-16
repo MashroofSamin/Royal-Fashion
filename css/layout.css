@@ -6,7 +6,13 @@ body {
 }
 
 .shop-main-wrapper {
-    flex: 1; 
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+    margin: 20px auto;
+    gap: 20px;
+    align-items: flex-start;
 }
 
 /* --- NAVIGATION --- */
