@@ -1,24 +1,24 @@
+// State
 let products = [];
-let activeMainCategory = window.activeMainCategory || "all";
+let activeMainCategory = "all";
 let activeColorFilters = [];
-window.refreshGlobalCart = function() { updateCartCount(); };
 
-const SUPABASE_URL = 'https://gouaisrlgkgrfymqsqas.supabase.co'
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdWFpc3JsZ2tncmZ5bXFzcWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MzI3NDEsImV4cCI6MjA4OTIwODc0MX0.wES6GjiS0D5FojHQEiTrE9SLAW-ep3BnxMuBlarC6wE'
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+// Supabase client
+const SUPABASE_URL = 'https://gouaisrlgkgrfymqsqas.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdWFpc3JsZ2tncmZ5bXFzcWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MzI3NDEsImV4cCI6MjA4OTIwODc0MX0.wES6GjiS0D5FojHQEiTrE9SLAW-ep3BnxMuBlarC6wE';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Load products from Supabase
 async function loadProducts() {
     try {
         const { data, error } = await db
             .from('products')
-            .select('*')
+            .select('*');
 
-        if (error) throw error
+        if (error) throw error;
 
         products = data;
-        console.log('Products from Supabase:', products);
-        
 
-        if (document.getElementById("slider-1")) {
+        if (document.getElementById('slider-1')) {
             fillSlider();
         }
 
@@ -29,20 +29,20 @@ async function loadProducts() {
     }
 }
 
-// Fixed: This now handles filtering logic without trying to build a nav bar
+// Set main category tab and apply filters
 function setMainCategory(cat, element) {
     document.querySelectorAll('.cat-tab').forEach(c => c.classList.remove('active'));
     if (element) element.classList.add('active');
-
     activeMainCategory = cat;
     applyFilters();
 }
 
-
-
+// Toggle color filter selection
 function toggleColorFilter(color, element) {
-    if (activeColorFilters.includes(color)) {
-        activeColorFilters = activeColorFilters.filter(c => c !== color);
+    if (!element) return;
+    const idx = activeColorFilters.indexOf(color);
+    if (idx > -1) {
+        activeColorFilters.splice(idx, 1);
         element.classList.remove('selected');
     } else {
         activeColorFilters.push(color);
@@ -51,65 +51,65 @@ function toggleColorFilter(color, element) {
     applyFilters();
 }
 
+// Update price range slider visual
 function fillSlider() {
     const s1 = document.getElementById("slider-1");
     const s2 = document.getElementById("slider-2");
     const track = document.getElementById("track");
     if (!s1 || !s2 || !track) return;
-    let p1 = (s1.value / s1.max) * 100;
-    let p2 = (s2.value / s2.max) * 100;
+    const p1 = (s1.value / s1.max) * 100;
+    const p2 = (s2.value / s2.max) * 100;
     track.style.background = `linear-gradient(to right, #ddd ${p1}%, var(--royal-blue) ${p1}%, var(--royal-blue) ${p2}%, #ddd ${p2}%)`;
 }
 
+// Handle min price slider change
 function slideOne() {
     const s1 = document.getElementById("slider-1");
     const s2 = document.getElementById("slider-2");
+    if (!s1 || !s2) return;
     if (parseInt(s2.value) - parseInt(s1.value) <= 20) s1.value = parseInt(s2.value) - 20;
-    document.getElementById("range1").textContent = s1.value;
+    const range1 = document.getElementById("range1");
+    if (range1) range1.textContent = s1.value;
     fillSlider();
     applyFilters();
 }
 
+// Handle max price slider change
 function slideTwo() {
     const s1 = document.getElementById("slider-1");
     const s2 = document.getElementById("slider-2");
+    if (!s1 || !s2) return;
     if (parseInt(s2.value) - parseInt(s1.value) <= 20) s2.value = parseInt(s1.value) + 20;
-    document.getElementById("range2").textContent = s2.value;
+    const range2 = document.getElementById("range2");
+    if (range2) range2.textContent = s2.value;
     fillSlider();
     applyFilters();
 }
 
+// Apply all active filters to product list
 function applyFilters() {
     const s1 = document.getElementById("slider-1");
     const s2 = document.getElementById("slider-2");
     const selectedDepts = Array.from(document.querySelectorAll('.dept-filter:checked')).map(cb => cb.value);
 
-    const minP = s1 ? parseInt(s1.value) : 0;
-    const maxP = s2 ? parseInt(s2.value) : 1000;
+    const minPrice = s1 ? parseInt(s1.value) : 0;
+    const maxPrice = s2 ? parseInt(s2.value) : 1000;
 
-    // --- SMARTER PAGE DETECTION ---
-    const path = window.location.pathname.toLowerCase();
-    
-    // This checks if "gifts" is anywhere in the URL name
-    const isGiftsPage = path.includes("gifts");
+    // Detect page type (gifts vs apparel)
+    const isGiftsPage = window.location.pathname.toLowerCase().includes("gifts");
 
     const filtered = products.filter(p => {
-        // 1. PAGE CHECK
-        // If we are on the gifts page, only show "gifts". Otherwise, show "apparel".
+        // Check page category
         const matchesPage = isGiftsPage ? (p.maincategory === "gifts") : (p.maincategory === "apparel");
+        if (!matchesPage) return false;
 
-        if (!matchesPage) return false; 
+        // Check main category filter
+        const matchCat = activeMainCategory === "all" || p.category === activeMainCategory || p.subcat === activeMainCategory;
 
-        // 2. CATEGORY CHECK
-        const matchCat = activeMainCategory === "all" || 
-        activeMainCategory === "gifts" ||
-        p.category === activeMainCategory ||
-        p.subcat === activeMainCategory;
-
-        // 3. OTHER FILTERS
+        // Check all active filters
         const matchDept = selectedDepts.length === 0 || selectedDepts.includes(p.dept);
         const matchColor = activeColorFilters.length === 0 || p.colors.some(c => activeColorFilters.includes(c));
-        const matchPrice = p.price >= minP && p.price <= maxP;
+        const matchPrice = p.price >= minPrice && p.price <= maxPrice;
 
         return matchCat && matchDept && matchColor && matchPrice;
     });
@@ -117,8 +117,7 @@ function applyFilters() {
     renderRows(filtered);
 }
 
-let visibleLimits = {}; // Object to track the limit for each subcategory
-
+// Render filtered products by subcategory
 function renderRows(data) {
     const container = document.getElementById('product-container');
     if (!container) return;
@@ -211,80 +210,61 @@ function renderRows(data) {
     });
 }
 
+// Update cart count in nav and free shipping progress
 function updateCartCount() {
-    // 1. Get the current cart from local storage
     const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
-    
-    // 2. Update the Bag number in the Nav
-    const countElement = document.getElementById('cart-count');
-    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-    if (countElement) countElement.textContent = totalItems;
 
-    // 3. FREE SHIPPING CALCULATION
-    const goal = 40; // Set your free shipping threshold here
-    const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
-    
+    // Update Bag count in navbar
+    const countElement = document.getElementById('cart-count');
+    if (countElement) {
+        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        countElement.textContent = totalItems;
+    }
+
+    // Update free shipping progress (if elements exist)
     const progressMsg = document.getElementById('shipping-message');
     const progressBar = document.getElementById('shipping-progress');
+    if (!progressMsg || !progressBar) return;
 
-    // Only run if the elements exist on the current page
-    if (progressMsg && progressBar) {
-        const remaining = goal - totalPrice;
+    const FREE_SHIPPING_THRESHOLD = 40;
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    const remaining = FREE_SHIPPING_THRESHOLD - totalPrice;
 
-        if (remaining > 0) {
-            // Still progress to be made
-            progressMsg.innerText = `Add $${remaining.toFixed(2)} more for free shipping!`;
-            
-            // Calculate percentage (e.g., $40 spent / $100 goal = 40%)
-            const percent = (totalPrice / goal) * 100;
-            progressBar.style.width = percent + "%";
-            progressMsg.style.color = "#333"; // Default color
-        } else {
-            // Goal reached
-            progressMsg.innerHTML = "🎉 You've earned <strong>FREE SHIPPING!</strong>";
-            progressBar.style.width = "100%";
-            progressMsg.style.color = "var(--brand-green)"; // Turn text green
-        }
+    if (remaining > 0) {
+        progressMsg.innerText = `Add $${remaining.toFixed(2)} more for free shipping!`;
+        progressBar.style.width = ((totalPrice / FREE_SHIPPING_THRESHOLD) * 100) + '%';
+        progressMsg.style.color = "#333";
+    } else {
+        progressMsg.innerHTML = "🎉 You've earned <strong>FREE SHIPPING!</strong>";
+        progressBar.style.width = "100%";
+        progressMsg.style.color = "var(--brand-green)";
     }
 }
 
-// Call this immediately so the number is correct when the page opens
-updateCartCount();
-
-document.addEventListener('DOMContentLoaded', () => {
-    const toggleBtn = document.getElementById('claim-shipping-toggle');
-    const details = document.getElementById('shipping-details');
-
-    if (toggleBtn && details) {
-        toggleBtn.addEventListener('click', () => {
-            // If it's hidden, show it. If it's shown, hide it.
-            if (details.style.display === "none") {
-                details.style.display = "block";
-                toggleBtn.innerText = "Close shipping info";
-            } else {
-                details.style.display = "none";
-                toggleBtn.innerText = "Claim free shipping!";
-            }
-        });
-    }
-});
-
+// Zoom to specific subcategory
 function zoomToSubcategory(subName) {
-    // 1. Set the global filter to the subcategory name
     activeMainCategory = subName;
-
-    // 2. Scroll to the top of the page so the user sees the new results
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // 3. Re-run the filters
     applyFilters();
-
-    // 4. (Optional) Add a "Back to All" button or update the UI
-    console.log("Viewing more of: " + subName);
 }
 
-// Run everything inside ONE listener to prevent double-firing
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadProducts();
     updateCartCount();
+
+    // Set up shipping info toggle
+    const toggleBtn = document.getElementById('claim-shipping-toggle');
+    const details = document.getElementById('shipping-details');
+    if (toggleBtn && details) {
+        toggleBtn.addEventListener('click', () => {
+            if (details.style.display === 'none') {
+                details.style.display = 'block';
+                toggleBtn.innerText = 'Close shipping info';
+            } else {
+                details.style.display = 'none';
+                toggleBtn.innerText = 'Claim free shipping!';
+            }
+        });
+    }
 });

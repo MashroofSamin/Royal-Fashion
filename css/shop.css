@@ -648,3 +648,134 @@ input[type="range"]::-webkit-slider-thumb {
         flex-wrap: wrap;
     }
 }
+
+/* --- CAROUSEL STYLES --- */
+.best-sellers {
+    margin-top: 60px;
+    padding: 40px 20px;
+    background: var(--pistachio);
+}
+
+.best-sellers-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+}
+
+.carousel-container {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.carousel-btn {
+    background: #1a1a1a;
+    color: #FFFBF7;
+    border: 2px solid #d4af37;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    z-index: 100;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative;
+    margin: 0 10px;
+}
+
+.carousel-btn:hover:not(:disabled) {
+    background: #d4af37;
+    color: #1a1a1a;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+.carousel-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    transition: transform 0.4s ease;
+    will-change: transform;
+}
+
+.carousel-product-link {
+    flex: 0 0 200px;
+    height: 200px;
+    display: block;
+    text-decoration: none;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.carousel-product-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-item {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f1e8;
+}
+
+.carousel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+@media (max-width: 768px) {
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .carousel-product-link {
+        flex: 0 0 160px;
+        height: 160px;
+    }
+
+    .carousel-track {
+        gap: 12px;
+    }
+}

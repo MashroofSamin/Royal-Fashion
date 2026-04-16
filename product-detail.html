@@ -64,6 +64,36 @@
             margin-left: 5px;
             text-transform: capitalize;
         }
+
+        #color-section {
+            display: none;
+        }
+
+        #color-section.visible {
+            display: block;
+        }
+
+        #infant-section,
+        #kids-section,
+        #women-section,
+        #adult-section {
+            display: none;
+        }
+
+        #infant-section.visible,
+        #kids-section.visible,
+        #women-section.visible,
+        #adult-section.visible {
+            display: block;
+        }
+
+        #quantity-controls {
+            display: none;
+        }
+
+        #quantity-controls.visible {
+            display: block;
+        }
     </style>
 </head>
 
@@ -98,7 +128,7 @@
                 <div class="product-price">--</div>
 
                 <!-- COLOR SWATCHES -->
-                <div id="color-section" class="color-swatch-group" style="display:none;">
+                <div id="color-section" class="color-swatch-group">
                     <label>Color: <span id="selected-color-label"></span></label>
                     <div id="color-grid" class="color-swatch-row"></div>
                 </div>
@@ -107,22 +137,22 @@
                 <div class="selection-group">
                     <span class="size-label">Select Size</span>
                     
-                    <div id="infant-section" style="display:none;">
+                    <div id="infant-section">
                         <p class="group-title">Infants & Toddlers</p>
                         <div id="infant-grid" class="size-grid"></div>
                     </div>
 
-                    <div id="kids-section" style="display:none;">
+                    <div id="kids-section">
                         <p class="group-title">Youth / Kids</p>
                         <div id="kids-grid" class="size-grid"></div>
                     </div>
 
-                    <div id="women-section" style="display:none;">
+                    <div id="women-section">
                         <p class="group-title">Women's Sizing</p>
                         <div id="women-grid" class="size-grid"></div>
                     </div>
 
-                    <div id="adult-section" style="display:none;">
+                    <div id="adult-section">
                         <p class="group-title">Adult (Unisex)</p>
                         <div id="adult-grid" class="size-grid"></div>
                     </div>
@@ -134,7 +164,7 @@
 
                 <div class="purchase-actions">
                     <button id="initial-add-btn" class="buy-button">Add to Bag</button>
-                    <div id="quantity-controls" class="quantity-toggle" style="display: none;">
+                    <div id="quantity-controls" class="quantity-toggle">
                         <button id="minus-btn">−</button>
                         <span id="current-qty">1</span>
                         <button id="plus-btn">+</button>

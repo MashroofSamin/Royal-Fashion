@@ -52,22 +52,34 @@ async function loadProductDetails() {
             .from('products')
             .select('*')
             .eq('id', productId)
-            .single()
+            .single();
 
-        if (error) throw error
+        if (error) throw error;
 
         currentProduct = data;
 
-        if (currentProduct) {
-            // 1. Basic Info
-            document.title = `${currentProduct.name} | Royal Fashion NYC`;
-            document.querySelector('.breadcrumb').innerText = `Shop / ${currentProduct.dept} / ${currentProduct.subcat}`;
-            document.querySelector('.product-title').innerText = currentProduct.name;
-            document.querySelector('.product-price').innerText = `$${parseFloat(currentProduct.price).toFixed(2)}`;
+        if (!currentProduct) {
+            const container = document.querySelector('.product-detail-container');
+            if (container) container.innerHTML = '<h1>Product not found</h1>';
+            return;
+        }
 
-            const mainImg = document.getElementById('mainProductImg');
+        // Cache DOM elements
+        const breadcrumb = document.querySelector('.breadcrumb');
+        const titleEl = document.querySelector('.product-title');
+        const priceEl = document.querySelector('.product-price');
+        const mainImg = document.getElementById('mainProductImg');
+
+        // 1. Basic Info
+        if (breadcrumb) breadcrumb.innerText = `Shop / ${currentProduct.dept} / ${currentProduct.subcat}`;
+        if (titleEl) titleEl.innerText = currentProduct.name;
+        if (priceEl) priceEl.innerText = `$${parseFloat(currentProduct.price).toFixed(2)}`;
+        if (mainImg) {
             mainImg.src = currentProduct.image;
             mainImg.alt = currentProduct.name;
+        }
+
+        document.title = `${currentProduct.name} | Royal Fashion NYC`;
 
             // 2. Color Swatches
             const colorSection = document.getElementById('color-section');
@@ -76,7 +88,7 @@ async function loadProductDetails() {
 
             if (currentProduct.colors && currentProduct.colors.length > 0 && colorSection && colorGrid) {
                 colorGrid.innerHTML = '';
-                colorSection.style.display = 'block';
+                colorSection.classList.add('visible');
 
                 currentProduct.colors.forEach((color, index) => {
                     const swatch = document.createElement('div');
@@ -116,7 +128,7 @@ async function loadProductDetails() {
                 selectedColor = currentProduct.colors[0];
                 if (colorLabel) colorLabel.innerText = selectedColor;
             } else if (colorSection) {
-                colorSection.style.display = 'none';
+                colorSection.classList.remove('visible');
             }
 
             // 3. Size Grids
@@ -129,7 +141,7 @@ async function loadProductDetails() {
                 [infantGrid, kidsGrid, womenGrid, adultGrid].forEach(grid => { if (grid) grid.innerHTML = ''; });
                 ['infant-section', 'kids-section', 'women-section', 'adult-section'].forEach(id => {
                     const el = document.getElementById(id);
-                    if (el) el.style.display = 'none';
+                    if (el) el.classList.remove('visible');
                 });
 
                 currentProduct.sizes.forEach((size, index) => {
@@ -150,22 +162,26 @@ async function loadProductDetails() {
                     if (sizeLower.includes("women")) {
                         if (womenGrid) {
                             womenGrid.appendChild(tile);
-                            document.getElementById('women-section').style.display = 'block';
+                            const womenSection = document.getElementById('women-section');
+                            if (womenSection) womenSection.classList.add('visible');
                         }
                     } else if (size.includes("Months") || size.includes("2T") || size.includes("6M") || size.includes("12M") || size.includes("18M")) {
                         if (infantGrid) {
                             infantGrid.appendChild(tile);
-                            document.getElementById('infant-section').style.display = 'block';
+                            const infantSection = document.getElementById('infant-section');
+                            if (infantSection) infantSection.classList.add('visible');
                         }
                     } else if (size.includes("(")) {
                         if (kidsGrid) {
                             kidsGrid.appendChild(tile);
-                            document.getElementById('kids-section').style.display = 'block';
+                            const kidsSection = document.getElementById('kids-section');
+                            if (kidsSection) kidsSection.classList.add('visible');
                         }
                     } else {
                         if (adultGrid) {
                             adultGrid.appendChild(tile);
-                            document.getElementById('adult-section').style.display = 'block';
+                            const adultSection = document.getElementById('adult-section');
+                            if (adultSection) adultSection.classList.add('visible');
                         }
                     }
 
@@ -175,7 +191,7 @@ async function loadProductDetails() {
             } else {
                 ['infant-section', 'kids-section', 'women-section', 'adult-section'].forEach(id => {
                     const el = document.getElementById(id);
-                    if (el) el.style.display = 'none';
+                    if (el) el.classList.remove('visible');
                 });
                 const selGroup = document.querySelector('.selection-group');
                 if (selGroup) selGroup.style.display = 'none';
@@ -184,17 +200,16 @@ async function loadProductDetails() {
 
             updateUIFromCart();
 
-            mainImg.onload = () => {
-                if (typeof initZoom === "function") initZoom("mainProductImg", "zoomResult");
-            };
-
-        } else {
-            document.querySelector('.product-detail-container').innerHTML = `<h1>Product not found</h1>`;
-        }
+            if (mainImg) {
+                mainImg.onload = () => {
+                    if (typeof initZoom === "function") initZoom("mainProductImg", "zoomResult");
+                };
+            }
 
     } catch (error) {
         console.error("Error loading product details:", error);
-        document.querySelector('.product-detail-container').innerHTML = `<h1>Error loading product. Please try again.</h1>`;
+        const container = document.querySelector('.product-detail-container');
+        if (container) container.innerHTML = `<h1>Error loading product. Please try again.</h1>`;
     }
 }
 
@@ -220,26 +235,31 @@ function updateUIFromCart() {
     if (addBtn && qtyControls && qtyText) {
         if (existingItem) {
             addBtn.style.display = 'none';
-            qtyControls.style.display = 'flex';
+            qtyControls.classList.add('visible');
             qtyText.innerText = existingItem.quantity;
         } else {
             addBtn.style.display = 'block';
-            qtyControls.style.display = 'none';
+            qtyControls.classList.remove('visible');
         }
     }
 }
 
 function changeQty(amount) {
-    if (!currentProduct || !selectedSize) return;
+    if (!currentProduct || !selectedSize) {
+        console.warn('Cannot change quantity: product or size not selected');
+        return;
+    }
 
-    const mainImg = document.getElementById('mainProductImg');
     let cart = JSON.parse(localStorage.getItem('royalCart')) || [];
     const index = cart.findIndex(item => item.id === currentProduct.id && item.size === selectedSize);
+    const mainImg = document.getElementById('mainProductImg');
 
     if (index > -1) {
+        // Item exists, update quantity
         cart[index].quantity += amount;
         if (cart[index].quantity <= 0) cart.splice(index, 1);
     } else if (amount > 0) {
+        // Add new item
         cart.push({
             id: currentProduct.id,
             name: currentProduct.name,
@@ -247,7 +267,7 @@ function changeQty(amount) {
             image: mainImg ? mainImg.src : currentProduct.image,
             size: selectedSize,
             color: selectedColor || '',
-            quantity: 1,
+            quantity: amount,
             link: `product-detail.html?id=${currentProduct.id}`
         });
     }
@@ -264,11 +284,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const plusBtn = document.getElementById('plus-btn');
     const minusBtn = document.getElementById('minus-btn');
 
+    // Attach quantity control listeners
     if (initialAddBtn) initialAddBtn.onclick = () => changeQty(1);
     if (plusBtn) plusBtn.onclick = () => changeQty(1);
     if (minusBtn) minusBtn.onclick = () => changeQty(-1);
 
+    // Load product details if on product-detail page
     if (document.querySelector('.product-title')) {
         loadProductDetails();
     }
-}); 
+});

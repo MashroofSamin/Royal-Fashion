@@ -11,6 +11,37 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/shop.css">
+
+    <style>
+        .shipping-claim-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        #claim-shipping-toggle {
+            background: none;
+            border: none;
+            color: #28a745;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 0.9rem;
+        }
+
+        #shipping-details {
+            display: none;
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #666;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        #shipping-details.visible {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -64,12 +95,9 @@
                 <span class="cat-tab" onclick="setMainCategory('Snowglobes', this)">Snowglobes</span>
             </div>
 
-            <div class="shipping-claim-container" style="text-align: center; margin-bottom: 25px;">
-                <button type="button" id="claim-shipping-toggle" 
-                    style="background: none; border: none; color: #28a745; font-weight: 800; cursor: pointer; text-decoration: underline; font-size: 0.9rem;">
-                    Claim free shipping!
-                </button>
-                <div id="shipping-details" style="display: none; margin-top: 8px; font-size: 0.75rem; color: #666; background: #f9f9f9; padding: 8px; border-radius: 4px;">
+            <div class="shipping-claim-container">
+                <button type="button" id="claim-shipping-toggle">Claim free shipping!</button>
+                <div id="shipping-details">
                     Spend <strong>$40</strong> for Free US Shipping <br> 
                     or <strong>$100</strong> for Free International Shipping!
                 </div>

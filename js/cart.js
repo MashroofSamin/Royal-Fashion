@@ -9,8 +9,8 @@ function updateQty(index, change) {
     }
 
     localStorage.setItem('royalCart', JSON.stringify(cart));
-    renderCart(); // Re-render everything
-    if (typeof updateCartCount === "function") updateCartCount();
+    renderCart();
+    if (typeof updateCartCount === 'function') updateCartCount();
 }
 
 // Function to remove items entirely
@@ -148,7 +148,10 @@ function removeFromCart(index) {
 }
 
 // Use DOMContentLoaded to ensure the HTML is ready before we try to inject items
-document.addEventListener('DOMContentLoaded', renderCart);
+document.addEventListener('DOMContentLoaded', () => {
+    renderCart();
+    updateCartCount();
+});
 
 document.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'claim-shipping-toggle') {

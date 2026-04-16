@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bag | Royal Fashion NYC</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -11,6 +11,55 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/shop.css">
+    <style>
+        .policy-notice {
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #eee;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        .policy-notice label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .policy-notice input[type="checkbox"] {
+            margin-top: 3px;
+        }
+
+        .policy-notice span {
+            font-size: 0.8rem;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        #checkout-btn {
+            width: 100%;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        #checkout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .stripe-notice {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        #cart-shipping {
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
 </head>
 
 <body>
@@ -45,7 +94,7 @@
             </div>
             <div class="summary-row">
                 <span>Shipping</span>
-                <span id="cart-shipping" style="font-size: 0.8rem; color: #888;">Calculated at checkout</span>
+                <span id="cart-shipping">Calculated at checkout</span>
             </div>
 
             <div class="summary-row total">
@@ -53,23 +102,21 @@
                 <span id="cart-total">$0.00</span>
             </div>
 
-            <div class="policy-notice"
-                style="margin-top: 20px; padding: 12px; border: 1px solid #eee; background: #fafafa; border-radius: 4px;">
-                <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="terms-agree" style="margin-top: 3px;">
-                    <span style="font-size: 0.8rem; color: #444; line-height: 1.4;">
+            <div class="policy-notice">
+                <label>
+                    <input type="checkbox" id="terms-agree">
+                    <span>
                         I understand all sales are final. <br>
                         <strong>No refunds, returns, or exchanges.</strong>
                     </span>
                 </label>
             </div>
 
-            <button id="checkout-btn" class="buy-button" disabled
-                style="width: 100%; margin-top: 15px; font-size: 1rem; opacity: 0.5; cursor: not-allowed;">
+            <button id="checkout-btn" class="buy-button" disabled>
                 Checkout
             </button>
 
-            <p style="font-size: 0.75rem; color: #888; margin-top: 15px; text-align: center;">
+            <p class="stripe-notice">
                 Secure payment powered by Stripe.
             </p>
         </aside>
@@ -80,17 +127,6 @@
     </footer>
 
     <script src="js/cart.js"></script>
-    <script>
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('royalCart')) || [];
-            const countElement = document.getElementById('cart-count');
-            if (countElement) {
-                const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                countElement.textContent = total;
-            }
-        }
-        document.addEventListener('DOMContentLoaded', updateCartCount);
-    </script>
 
 </body>
 </html>
